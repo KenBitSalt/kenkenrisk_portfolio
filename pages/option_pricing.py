@@ -12,13 +12,22 @@ col1, col2 = st.columns(2)
 with col1:
 
     if "Market" not in st.session_state:
-        st.session_state.Market = "China"
+        st.session_state.Market = "China-A"
+    
+    if "Type" not in st.session_state:
+        st.session_state.Type = "Call"
 
     #st.checkbox("Stock Market", key="disabled")
     st.radio(
         "Select Stock Market for this calculation",
         key="Market",
-        options=["U.S.", "China"],
+        options=["U.S.", "China-A"],
+    )
+
+    st.radio(
+        "Select Contract type for this calculation",
+        key="Type",
+        options=["Call", "Put"],
     )
 
     Strike_Price = st.slider("Set Strike Price", 0, 130, 25)
@@ -41,3 +50,14 @@ with col2:
     
     if "stock_id" in st.session_state:
         st.write(st.session_state.stock_id)
+
+    st.button("Reset", type="primary")
+
+    if st.button("Proceed"):
+        st.write(st.session_state.stock_id)
+        st.write(st.session_state.Market)
+        st.write(st.session_state.Type)
+        st.write(Strike_Price)
+        st.write(age)
+
+st.markdown("## Result:")
