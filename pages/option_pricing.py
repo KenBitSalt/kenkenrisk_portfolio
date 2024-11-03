@@ -1,6 +1,6 @@
 import streamlit as st
 
-def check_integrity(stock_id,Market,Type,Strike_Price,age):
+def check_integrity(stock_id,Market,Type,Model,Strike_Price,age):
     # check conditions
     st.write('RUN!')
 
@@ -45,7 +45,7 @@ with col2:
         st.write("STOCK TICKER IS NEEDED")
 
     text_input = st.text_input(
-        "Enter stock ticker 👇",
+        "👇 Enter stock ticker 👇",
         label_visibility="visible",
         disabled=st.session_state.disabled,
         key = "stock_id",
@@ -54,6 +54,18 @@ with col2:
     
     if "stock_id" in st.session_state:
         st.write(st.session_state.stock_id)
+        if st.session_state.Market == "China-A":
+            import check_stock_tushare as check
+
+    if "Model" not in st.session_state:
+        st.session_state.Model = "Black-Scholes"
+
+    #st.checkbox("Stock Market", key="disabled")
+    st.radio(
+        "Implemented Model for this calculation",
+        key="Model",
+        options=["Black-Scholes", "others (not yet deployed)"],
+    )
 
     st.button("Reset", type="primary")
 
@@ -70,7 +82,7 @@ with col2:
         st.write(Strike_Price)
         st.write(age)
 
-        check_integrity(st.session_state.stock_id,st.session_state.Market,st.session_state.Type,Strike_Price,age)
+        check_integrity(st.session_state.stock_id,st.session_state.Market,st.session_state.Type,st.session_state.Model,Strike_Price,age)
 
 
 st.markdown("## Result:")
