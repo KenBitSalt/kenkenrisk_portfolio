@@ -13,11 +13,18 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.markdown("This site is a toy deployment of some highlights of my previous work, detailed in a resume provided below.")
-    with open("files/Chen Resume.pdf", "rb") as file:
+    with open("files/Chen_Resume.pdf", "rb") as file:
         btn = st.download_button(
         label="Download a copy of my resume",
         data=file,
-        file_name="files/Chen Resume.pdf",
+        file_name="files/Chen_Resume.pdf",
+        mime="text/csv",
+    )
+    with open("files/陈思懿简历.pdf", "rb") as file:
+        btn = st.download_button(
+        label="或 者 一 份 中 文 简 历",
+        data=file,
+        file_name="files/陈思懿简历.pdf",
         mime="text/csv",
     )
     st.markdown("My work and studies focus on secondary market derivatives and asset management.")
