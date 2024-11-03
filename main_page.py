@@ -15,7 +15,7 @@ with col1:
     st.markdown("This site is a toy deployment of some highlights of my previous work, detailed in a resume provided below.")
     with open("files/Chen_Resume.pdf", "rb") as file:
         btn = st.download_button(
-        label="Download a copy of my resume",
+        label="Download a copy of it",
         data=file,
         file_name="files/Chen_Resume.pdf",
         mime="text/csv",
