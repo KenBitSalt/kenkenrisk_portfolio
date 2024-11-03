@@ -1,5 +1,9 @@
 import streamlit as st
 
+def check_integrity(stock_id,Market,Type,Strike_Price,age):
+    # check conditions
+    st.write('RUN!')
+
 st.markdown("# Option pricing")
 st.sidebar.markdown("# option pricing")
 
@@ -54,10 +58,19 @@ with col2:
     st.button("Reset", type="primary")
 
     if st.button("Proceed"):
-        st.write(st.session_state.stock_id)
-        st.write(st.session_state.Market)
+        if st.session_state.stock_id:
+            st.write(st.session_state.stock_id)
+        else:
+            st.write("still need stock ticker!")
+        if st.session_state.Market:
+            st.write(st.session_state.Market)
+        else:
+            st.write("No market!!!")
         st.write(st.session_state.Type)
         st.write(Strike_Price)
         st.write(age)
+
+        check_integrity(st.session_state.stock_id,st.session_state.Market,st.session_state.Type,Strike_Price,age)
+
 
 st.markdown("## Result:")

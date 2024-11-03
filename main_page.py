@@ -23,7 +23,7 @@ with col1:
 
 
 with col2:
-    pass
+    st.image("files/me.jpg", caption="[A digital portrait of me]")
 
 
 
