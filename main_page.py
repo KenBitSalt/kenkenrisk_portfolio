@@ -20,10 +20,14 @@ with col1:
         file_name="files/Chen Resume.pdf",
         mime="text/csv",
     )
+    st.markdown("My work and studies focus on secondary market derivatives and asset management.")
+    st.markdown("contact me via:")
+    st.markdown("- sc4793@columbia.edu")
+    st.markdown("- (551)220-8597")
 
 
 with col2:
-    st.image("files/me.jpg", caption="[A digital portrait of me]")
+    st.image("files/me.jpg", caption="[A digital portrait of me 2024]")
 
 
 
