@@ -34,7 +34,7 @@ with col1:
 
 
 with col2:
-    st.image("files/me.jpg", caption="[A digital portrait of me 2024]")
+    st.image("files/me.jpg", caption="[Some digital portrait of arthur 2024]")
 
 
 

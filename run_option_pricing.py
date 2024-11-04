@@ -1,4 +1,3 @@
-import yfinance as yf
 import numpy as np
 import scipy.stats as si
 import matplotlib.pyplot as plt
@@ -6,7 +5,8 @@ import mplfinance as mpf
 import plotly.graph_objects as go
 from datetime import datetime
 
-def calculate_historical_volatility(stock_data, window=252):
+def calculate_historical_volatility(stock_data, window=256):
+    window = len(stock_data)
     log_returns = np.log(stock_data['Close'] / stock_data['Close'].shift(1))
     volatility = np.sqrt(window) * log_returns.std()
     return volatility
@@ -32,13 +32,12 @@ class BlackScholesModel:
         return (self.K * np.exp(-self.r * self.T) * si.norm.cdf(-self.d2(), 0.0, 1.0) - self.S * si.norm.cdf(-self.d1(), 0.0, 1.0))
 
 # Example usage:
-bsm = BlackScholesModel(S=100, K=100, T=1, r=0.05, sigma=0.2)
-print(f"Call Option Price: {bsm.call_option_price()}")
-print(f"Put Option Price: {bsm.put_option_price()}")
+#bsm = BlackScholesModel(S=100, K=100, T=1, r=0.05, sigma=0.2)
+#print(f"Call Option Price: {bsm.call_option_price()}")
+#print(f"Put Option Price: {bsm.put_option_price()}")
 
 
-jpm_volatility = calculate_historical_volatility(jpm_stock_data)
-print(f"JPM Historical Volatility: {jpm_volatility}")
+
 
 class BlackScholesGreeks(BlackScholesModel):
     def delta_call(self):
