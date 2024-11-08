@@ -131,7 +131,7 @@ with col2:
         #st.write("Strike: ",Strike_Price)
         #st.write("Time to Maturity: ",age)
         #st.write("Risk-free rate: ",risk_free)
-    if ("stock_id" in st.session_state) & (len(st.session_state.stock_id) >= 1) & (Strike_Price) :
+    if ("stock_id" in st.session_state) & (len(st.session_state.stock_id) >= 1) & (Strike_Price >= 0) :
         if check_integrity(st.session_state.stock_id,st.session_state.Market,st.session_state.Type,st.session_state.Model,Strike_Price,age):
             st.write("PLEASE REFER TO THE RESULT")
             show = True
