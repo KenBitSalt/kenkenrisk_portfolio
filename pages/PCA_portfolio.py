@@ -27,8 +27,13 @@ with col2:
     if uploaded_file is not None:
         # To read file as bytes:
         bytes_data = uploaded_file.getvalue()
-        st.write(bytes_data)
         # To convert to a string based IO:
         # Can be used wherever a "file-like" object is accepted:
         dataframe = pd.read_csv(uploaded_file)
-        st.write(dataframe)
+
+        st.dataframe(
+            dataframe,
+            hide_index=False,
+        )
+
+    
