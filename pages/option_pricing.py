@@ -118,11 +118,13 @@ with col2:
 
     if ("stock_id" in st.session_state) & (len(st.session_state.stock_id) >= 1) :
         if check_integrity(st.session_state.stock_id,st.session_state.Market,st.session_state.Type,st.session_state.Model,Strike_Price,age):
-            st.markdown("### PLEASE REFER TO THE RESULT")
+            st.markdown("-- PLEASE REFER TO THE RESULT --")
             show = True
 
         else:
             st.write("Data is not integral, try again")
+
+st.markdown(" ")
 
 with col1:
     st.markdown("## Result:")
