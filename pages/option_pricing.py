@@ -142,12 +142,20 @@ with col2:
         else:
             st.write("Data is not integral, try again")
 
+with col1:
 
-st.markdown("## Result:")
-if (len(st.session_state.stock_id) >= 1) :
-    #stock_hist = cs.get_daily(st.session_state.stock_id)
-    st.line_chart(stock_hist, x="Date", y=["Close","Strike"])
-    #st.markdown('stock "%s" in [%s] ...' % (st.session_state.stock_id, st.session_state.Market))
+    st.markdown("## Result:")
+    if (len(st.session_state.stock_id) >= 1) :
+        #stock_hist = cs.get_daily(st.session_state.stock_id)
+        st.line_chart(stock_hist, x="Date", y=["Close","Strike"])
+        #st.markdown('stock "%s" in [%s] ...' % (st.session_state.stock_id, st.session_state.Market))
+            
+                
+
+    else:
+        st.markdown('Enter the required information first')
+
+with col2:
     if show:
         #print(len(stock_hist)-1)
         #st.markdown('Current Price [%s], Volatility [%s] ...' % (str(current_price), str(volatility)))
@@ -181,8 +189,3 @@ if (len(st.session_state.stock_id) >= 1) :
             st.markdown('- theta: %s' % theta)
             st.markdown('- vega: %s' % vega)
             st.markdown('- rho: %s' % rho)
-        
-            
-
-else:
-    st.markdown('Enter the required information first')
