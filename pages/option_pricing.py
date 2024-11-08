@@ -48,6 +48,8 @@ def check_integrity(stock_id,Market,Type,Model,Strike_Price,age):
 st.markdown("# Option pricing")
 st.sidebar.markdown("# option pricing")
 
+st.divider()
+
 # Store the initial value of widgets in session state
 st.session_state.visibility = "visible"
 st.session_state.disabled = False
@@ -124,16 +126,18 @@ with col2:
         else:
             st.write("Data is not integral, try again")
 
-st.markdown(" ")
+st.divider()
 
-with col1:
+col3, col4 = st.columns(2)
+
+with col3:
     st.markdown("## Result:")
     if show :
         st.line_chart(stock_hist, x="Date", y=["Close","Strike"])
     else:
         st.markdown('Enter the required information first')
 
-with col2:
+with col4:
     if show:
         model = rp.BlackScholesModel(current_price, Strike_Price,age/12,risk_free,volatility)
         deltas = rp.BlackScholesGreeks(current_price, Strike_Price,age/12,risk_free,volatility)
@@ -146,6 +150,7 @@ with col2:
             theta = deltas.theta_call()
             vega = deltas.vega()
             rho = deltas.rho_call()
+            st.divider()
             st.markdown('### With Greeks: ')
             st.markdown('**$\Delta$** : %s' % delta)
             st.markdown('**$\Gamma$** : %s' % gamma)
@@ -160,6 +165,7 @@ with col2:
             theta = deltas.theta_put()
             vega = deltas.vega()
             rho = deltas.rho_put()
+            st.divider()
             st.markdown('### With Greeks: ')
             st.markdown('**$\Delta$** : %s' % delta)
             st.markdown('**$\Gamma$** : %s' % gamma)

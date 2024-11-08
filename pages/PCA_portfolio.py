@@ -1,4 +1,6 @@
 import streamlit as st
+from io import StringIO
+import pandas as pd
 
 st.markdown("# PCA portfolio")
 st.sidebar.markdown("# pca portfolio")
@@ -21,9 +23,20 @@ with col1:
     st.write("Values:", values)
 
 with col2:
-    text_input = st.text_input(
-        "Enter stock ticker 👇",
-        label_visibility=st.session_state.visibility,
-        disabled=st.session_state.disabled,
-        placeholder=st.session_state.placeholder,
-    )
+    uploaded_file = st.file_uploader("Upload a csv file containing optimized value for each stock")
+    if uploaded_file is not None:
+        # To read file as bytes:
+        bytes_data = uploaded_file.getvalue()
+        st.write(bytes_data)
+
+        # To convert to a string based IO:
+        stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
+        st.write(stringio)
+
+        # To read file as string:
+        string_data = stringio.read()
+        st.write(string_data)
+
+        # Can be used wherever a "file-like" object is accepted:
+        dataframe = pd.read_csv(uploaded_file)
+        st.write(dataframe)
