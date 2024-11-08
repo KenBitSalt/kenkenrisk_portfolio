@@ -66,7 +66,7 @@ with col1:
     st.radio(
         "Select Stock Market for this calculation",
         key="Market",
-        options=["U.S.", "China-A (under construction)"],
+        options=["U.S.", "China-A (constructing)"],
     )
 
     st.radio(
