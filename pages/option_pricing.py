@@ -141,7 +141,7 @@ with col2:
 
 
 st.markdown("## Result:")
-if (len(st.session_state.stock_id) >= 1) :
+if (len(st.session_state.stock_id) >= 1) & (len(st.session_state.stock_id) >= 1) :
     #stock_hist = cs.get_daily(st.session_state.stock_id)
     st.line_chart(stock_hist, x="Date", y=["Close","Strike"])
     #st.markdown('stock "%s" in [%s] ...' % (st.session_state.stock_id, st.session_state.Market))
