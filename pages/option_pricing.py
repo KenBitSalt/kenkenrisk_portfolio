@@ -14,6 +14,7 @@ sys.path.append(a)
 import check_stock as cs
 import run_option_pricing as rp
 
+ready = False
 show = False
 visible_strike = False
 
@@ -104,6 +105,8 @@ with col2:
         
     if visible_strike:
         Strike_Price = float(st.slider("👇 Then Set Strike Price 👇", current_price*0.2, current_price*2, current_price))
+        if (Strike_Price >= 0):
+            ready = True
         stock_hist['Strike'] = Strike_Price
 
     if "Model" not in st.session_state:
@@ -131,7 +134,7 @@ with col2:
         #st.write("Strike: ",Strike_Price)
         #st.write("Time to Maturity: ",age)
         #st.write("Risk-free rate: ",risk_free)
-    if ("stock_id" in st.session_state) & (len(st.session_state.stock_id) >= 1) & (Strike_Price >= 0) :
+    if ("stock_id" in st.session_state) & (len(st.session_state.stock_id) >= 1) :
         if check_integrity(st.session_state.stock_id,st.session_state.Market,st.session_state.Type,st.session_state.Model,Strike_Price,age):
             st.write("PLEASE REFER TO THE RESULT")
             show = True
