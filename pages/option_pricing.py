@@ -131,13 +131,13 @@ with col2:
         #st.write("Strike: ",Strike_Price)
         #st.write("Time to Maturity: ",age)
         #st.write("Risk-free rate: ",risk_free)
+    if "stock_id" in st.session_state:
+        if check_integrity(st.session_state.stock_id,st.session_state.Market,st.session_state.Type,st.session_state.Model,Strike_Price,age):
+            st.write("PLEASE REFER TO THE RESULT")
+            show = True
 
-    if check_integrity(st.session_state.stock_id,st.session_state.Market,st.session_state.Type,st.session_state.Model,Strike_Price,age):
-        st.write("PLEASE REFER TO THE RESULT")
-        show = True
-
-    else:
-        st.write("Data is not integral, try again")
+        else:
+            st.write("Data is not integral, try again")
 
 
 st.markdown("## Result:")
