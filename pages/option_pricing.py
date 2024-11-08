@@ -150,7 +150,7 @@ with col2:
             st.markdown('**$\Delta$** : %s' % delta)
             st.markdown('**$\Gamma$** : %s' % gamma)
             st.markdown('**$\Theta$** : %s' % theta)
-            st.markdown('**$\Nu$** : %s' % vega)
+            st.markdown('**$\Chi$** : %s' % vega)
             st.markdown('**$\Rho$** : %s' % rho)
         else:
             price = model.put_option_price()
@@ -164,5 +164,5 @@ with col2:
             st.markdown('**$\Delta$** : %s' % delta)
             st.markdown('**$\Gamma$** : %s' % gamma)
             st.markdown('**$\Theta$** : %s' % theta)
-            st.markdown('**$\Nu$** : %s' % vega)
+            st.markdown('**$\Chi$** : %s' % vega)
             st.markdown('**$\Rho$** : %s' % rho)
