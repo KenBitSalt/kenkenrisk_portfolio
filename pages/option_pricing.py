@@ -55,14 +55,12 @@ st.session_state.disabled = False
 col1, col2 = st.columns(2)
 
 with col1:
-
     if "Market" not in st.session_state:
         st.session_state.Market = "U.S."
     
     if "Type" not in st.session_state:
         st.session_state.Type = "Call"
 
-    #st.checkbox("Stock Market", key="disabled")
     st.radio(
         "Select Stock Market for this calculation",
         key="Market",
@@ -75,8 +73,6 @@ with col1:
         options=["Call", "Put"],
     )
 
-    #Strike_Price = float(st.slider("Set Strike Price", 0.0, 1000.0, 25.0))
-    #values = st.slider("Select a range of values", 0.0, 100.0, (25.0, 75.0))
     age = int(st.slider("Set target month of option", 0, 36, 12))
     risk_free = float(st.slider("Set risk-free rate", 0.0, 1.0, 0.1))
 
@@ -99,7 +95,7 @@ with col2:
             current_price = stock_hist.loc[len(stock_hist)-1,"Close"]
             stock_hist['Strike'] = current_price
             volatility = rp.calculate_historical_volatility(stock_hist)
-            #st.line_chart(stock_hist, x="Date", y="Close")
+
             st.write("%s has latest price: %s" % (st.session_state.stock_id, current_price))
             visible_strike = True
         
@@ -119,46 +115,24 @@ with col2:
         options=["Black-Scholes", "others (not yet deployed)"],
     )
 
-    #st.button("Reset", type="primary")
 
-    #if st.button("Proceed"):
-        #if st.session_state.stock_id:
-        #    st.write("Target: ", st.session_state.stock_id)
-        #else:
-        #    st.write("still need stock ticker!")
-        #if st.session_state.Market:
-        #    st.write("Market:",st.session_state.Market)
-        #else:
-        #    st.write("No market!!!")
-        #st.write("Contract: ", st.session_state.Type)
-        #st.write("Strike: ",Strike_Price)
-        #st.write("Time to Maturity: ",age)
-        #st.write("Risk-free rate: ",risk_free)
     if ("stock_id" in st.session_state) & (len(st.session_state.stock_id) >= 1) :
         if check_integrity(st.session_state.stock_id,st.session_state.Market,st.session_state.Type,st.session_state.Model,Strike_Price,age):
-            st.write("PLEASE REFER TO THE RESULT")
+            st.markdown("### -- PLEASE REFER TO THE RESULT --")
             show = True
 
         else:
             st.write("Data is not integral, try again")
 
 with col1:
-
     st.markdown("## Result:")
-    if (len(st.session_state.stock_id) >= 1) :
-        #stock_hist = cs.get_daily(st.session_state.stock_id)
+    if show :
         st.line_chart(stock_hist, x="Date", y=["Close","Strike"])
-        #st.markdown('stock "%s" in [%s] ...' % (st.session_state.stock_id, st.session_state.Market))
-            
-                
-
     else:
         st.markdown('Enter the required information first')
 
 with col2:
     if show:
-        #print(len(stock_hist)-1)
-        #st.markdown('Current Price [%s], Volatility [%s] ...' % (str(current_price), str(volatility)))
         model = rp.BlackScholesModel(current_price, Strike_Price,age/12,risk_free,volatility)
         deltas = rp.BlackScholesGreeks(current_price, Strike_Price,age/12,risk_free,volatility)
         if st.session_state.Type == 'Call':
