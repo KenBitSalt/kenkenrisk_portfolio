@@ -118,7 +118,7 @@ with col2:
 
     if ("stock_id" in st.session_state) & (len(st.session_state.stock_id) >= 1) :
         if check_integrity(st.session_state.stock_id,st.session_state.Market,st.session_state.Type,st.session_state.Model,Strike_Price,age):
-            st.markdown("### -- PLEASE REFER TO THE RESULT --")
+            st.markdown("### PLEASE REFER TO THE RESULT")
             show = True
 
         else:
@@ -144,11 +144,11 @@ with col2:
             vega = deltas.vega()
             rho = deltas.rho_call()
             st.markdown('### With Greeks: ')
-            st.markdown('- delta: %s' % delta)
-            st.markdown('- gamma: %s' % gamma)
-            st.markdown('- theta: %s' % theta)
-            st.markdown('- vega: %s' % vega)
-            st.markdown('- rho: %s' % rho)
+            st.markdown('- ** delta **: %s' % delta)
+            st.markdown('- ** gamma **: %s' % gamma)
+            st.markdown('- ** theta **: %s' % theta)
+            st.markdown('- ** vega **: %s' % vega)
+            st.markdown('- ** rho **: %s' % rho)
         else:
             price = model.put_option_price()
             st.markdown('### Put Price is: %s' % price)
@@ -158,8 +158,8 @@ with col2:
             vega = deltas.vega()
             rho = deltas.rho_put()
             st.markdown('### With Greeks: ')
-            st.markdown('- delta: %s' % delta)
-            st.markdown('- gamma: %s' % gamma)
-            st.markdown('- theta: %s' % theta)
-            st.markdown('- vega: %s' % vega)
-            st.markdown('- rho: %s' % rho)
+            st.markdown('- ** delta **: %s' % delta)
+            st.markdown('- ** gamma **: %s' % gamma)
+            st.markdown('- ** theta **: %s' % theta)
+            st.markdown('- ** vega **: %s' % vega)
+            st.markdown('- ** rho **: %s' % rho)
