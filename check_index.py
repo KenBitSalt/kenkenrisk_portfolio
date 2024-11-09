@@ -21,19 +21,7 @@ class index:
 
     def get_weight(self):
         if self.method == "yfinance":
-            etf = yf.Ticker(self.ticker)
-            # Get the top holdings (this may vary depending on data availability)
-            holdings = etf.get_analysis()['holdings']
-            # Check if holdings data is available
-            if holdings is not None:
-                # Create a DataFrame
-                df_holdings = pd.DataFrame(holdings)
-                # Calculate the weight of each holding
-                df_holdings['Weight'] = df_holdings['Market Cap'] / df_holdings['Market Cap'].sum()
-                # Display the holdings with calculated weights
-                print(df_holdings[['Symbol', 'Market Cap', 'Weight']])
-            else:
-                print("Holdings data not available for this ticker.")
+            pass
 
-index_1 = index("SPY","U.S.")
-index_1.get_weight()
+#index_1 = index("SPY","U.S.")
+#index_1.get_weight()
