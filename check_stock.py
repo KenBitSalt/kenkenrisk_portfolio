@@ -1,4 +1,5 @@
 import yfinance as yf
+import tushare as ts
 import datetime
 
 
