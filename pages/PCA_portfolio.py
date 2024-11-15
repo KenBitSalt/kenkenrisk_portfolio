@@ -60,6 +60,7 @@ with col2:
         # To convert to a string based IO:
         # Can be used wherever a "file-like" object is accepted:
         dataframe = pd.read_csv(uploaded_file)
+        st.markdown("User Uploaded Pool of len: %s" % len(dataframe))
         st.dataframe(
             dataframe,
             hide_index=False,
