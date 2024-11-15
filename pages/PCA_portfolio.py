@@ -27,7 +27,7 @@ with col1:
     )
 
 with col2:
-    st.markdown("Upload a csv file containing selectable pool and optimized value (preference) for each item")
+    st.markdown("Upload a csv file containing selectable pool and optimized objective for each item")
     uploaded_file = st.file_uploader("Must Cols: [stock_id]: ticker, [objective]: optimzation objective")
     if uploaded_file is not None:
         # To read file as bytes:
@@ -47,4 +47,4 @@ with col2:
     else:
         st.write("Using User-Designated Pool")
 
-    
+st.divider()
