@@ -58,7 +58,7 @@ with col2:
     
 
     if use_preset:
-        st.markdown("### Using Preset Pool")
+        st.markdown("Using Preset Pool")
         df = gp.pool(max=5000).get_df()
         st.dataframe(df)
     else:
