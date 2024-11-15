@@ -44,7 +44,7 @@ with col2:
 
     if use_preset:
         st.write("Using Preset pool")
-    if use_preset:
+    else:
         st.write("Using User-Designated Pool")
 
     
