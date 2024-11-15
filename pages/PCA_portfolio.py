@@ -37,7 +37,7 @@ with col1:
         key="direction",
         options=["Maximize", "Minimize"],
     )
-    
+
     st.markdown("Upload a csv file containing selectable pool and optimized objective for each item")
     uploaded_file = st.file_uploader("Must Cols: [stock_id]: ticker, [objective]: optimzation objective")
     if uploaded_file is not None:
@@ -58,8 +58,8 @@ with col2:
     
 
     if use_preset:
-        print("Using Preset Pool")
-        df = gp.pool(max=3000).get_df()
+        st.markdown("##Using Preset Pool##")
+        df = gp.pool(max=5000).get_df()
         st.dataframe(df)
     else:
         st.write("Using User-Designated Pool")
