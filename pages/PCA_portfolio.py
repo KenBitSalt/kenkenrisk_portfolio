@@ -1,6 +1,18 @@
 import streamlit as st
 from io import StringIO
 import pandas as pd
+import os 
+import sys
+
+myDir = os.getcwd()
+sys.path.append(myDir)
+
+from pathlib import Path
+path = Path(myDir)
+a=str(path.parent.absolute())
+sys.path.append(a)
+import generate_random_pool as gp
+import run_pca_portfolio as rp
 
 st.markdown("# PCA portfolio")
 st.sidebar.markdown("# pca portfolio")
@@ -43,8 +55,11 @@ with col2:
     use_preset = st.checkbox("Use preset pool")
 
     if use_preset:
-        st.write("Using Preset pool")
+        df = gp.pool(max=3000).get_df()
+        st.dataframe(df)
     else:
         st.write("Using User-Designated Pool")
+
+    
 
 st.divider()
