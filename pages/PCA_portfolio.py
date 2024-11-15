@@ -38,20 +38,11 @@ with col1:
         options=["Maximize", "Minimize"],
     )
 
-    st.markdown("Upload a csv file containing selectable pool and optimized objective for each item")
-    uploaded_file = st.file_uploader("Must Cols: [stock_id]: ticker, [objective]: optimzation objective")
-    if uploaded_file is not None:
-        # To read file as bytes:
-        bytes_data = uploaded_file.getvalue()
-        # To convert to a string based IO:
-        # Can be used wherever a "file-like" object is accepted:
-        dataframe = pd.read_csv(uploaded_file)
-        st.dataframe(
-            dataframe,
-            hide_index=False,
-        )
-
     use_preset = st.checkbox("Use preset pool")
+
+    st.markdown("OR upload csv file containing stock pool and optimized objective for each item")
+    uploaded_file = st.file_uploader("Must Cols: [stock_id]: ticker, [objective]: optimzation objective")
+
 
 
 with col2:
@@ -62,6 +53,17 @@ with col2:
         st.dataframe(df)
     else:
         st.write("Using User-Designated Pool")
+
+    if uploaded_file is not None:
+        # To read file as bytes:
+        bytes_data = uploaded_file.getvalue()
+        # To convert to a string based IO:
+        # Can be used wherever a "file-like" object is accepted:
+        dataframe = pd.read_csv(uploaded_file)
+        st.dataframe(
+            dataframe,
+            hide_index=False,
+        )
 
     
 
