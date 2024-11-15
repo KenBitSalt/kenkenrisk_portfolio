@@ -1,14 +1,19 @@
 import yfinance as yf
 import tushare as ts
 import datetime
+import pandas_market_calendars as mcal
 
 
 def get_daily(ticker,length=256):
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
+    start = (datetime.datetime.now() - datetime.timedelta(days=length)).strftime('%Y-%m-%d')
+    # Get the calendar for the New York Stock Exchange (NYSE)
+    nyse = mcal.get_calendar('NYSE')
+    late = nyse.schedule(start_date='2024-11-01', end_date=today)
+    latest_trade_day = mcal.date_range(late, frequency='1D')[-2].strftime('%Y-%m-%d')
     stock = yf.Ticker(ticker)
     # GET TODAYS DATE AND CONVERT IT TO A STRING WITH YYYY-MM-DD FORMAT (YFINANCE EXPECTS THAT FORMAT)
-    end_date = datetime.datetime.now().strftime('%Y-%m-%d')
-    start_date = datetime.datetime.now() - datetime.timedelta(days=length)
-    start_date = start_date.strftime('%Y-%m-%d')
-    stock_hist = stock.history(start=start_date,end=end_date)
+
+    stock_hist = stock.history(start=start,end=latest_trade_day)
     stock_hist = stock_hist.reset_index(drop = False)
     return stock_hist
