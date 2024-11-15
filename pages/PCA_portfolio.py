@@ -22,7 +22,7 @@ st.session_state.visibility = "visible"
 st.session_state.disabled = False
 st.session_state.index = "SP500"
 use_preset = False
-
+df = pd.DataFrame()
 col1, col2 = st.columns(2)
 
 with col1:
@@ -37,6 +37,9 @@ with col1:
         key="direction",
         options=["Maximize", "Minimize"],
     )
+
+    if (use_preset) & len(df)>=1:
+        st.dataframe(df)
 
 with col2:
     st.markdown("Upload a csv file containing selectable pool and optimized objective for each item")
@@ -55,8 +58,8 @@ with col2:
     use_preset = st.checkbox("Use preset pool")
 
     if use_preset:
+        print("Using Preset Pool")
         df = gp.pool(max=3000).get_df()
-        st.dataframe(df)
     else:
         st.write("Using User-Designated Pool")
 
