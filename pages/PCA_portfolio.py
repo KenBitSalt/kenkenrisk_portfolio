@@ -55,11 +55,10 @@ with col1:
 
 
 with col2:
-    
 
     if use_preset:
-        st.markdown("Using Preset Pool")
         df = gp.pool(max=5000).get_df()
+        st.markdown("Using Preset Pool of len: %s" % len(df))
         st.dataframe(df)
     else:
         st.write("Using User-Designated Pool")
