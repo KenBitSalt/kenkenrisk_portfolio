@@ -25,7 +25,8 @@ st.session_state.visibility = "visible"
 st.session_state.disabled = False
 df = pd.DataFrame()
 uploaded_file = None
-show_triggered = True
+
+
 col1, col2 = st.columns(2)
 
 with col1:
@@ -64,7 +65,6 @@ with col2:
 
     if (use_preset == ":rainbow[use_preset]") :
         if (st.button("Reproduce Pool")):
-            show_triggered = True
             df = gp.pool(range=range, max=5000).get_df()
         st.markdown("Using Preset Pool of len: %s" % len(df))
     else:
@@ -79,7 +79,7 @@ with col2:
         st.markdown("User Uploaded Pool of len: %s" % len(dataframe))
 
 
-    if (use_preset == ":rainbow[use_preset]") & (len(df)>=1) & show_triggered:
+    if (use_preset == ":rainbow[use_preset]") & (len(df)>=1):
         hist = alt.Chart(df).mark_bar().encode(x = alt.X('objective', 
                                                         bin = alt.BinParams(maxbins = 30)), 
                                                 y = 'count()') 
