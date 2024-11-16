@@ -75,7 +75,7 @@ with col1:
         options=["Call", "Put"],
     )
 
-    age = int(st.slider("Set target month of option", 0, 36, 12))
+    age = int(st.slider("Set month until expiration", 0, 36, 12))
     risk_free = float(st.slider("Set risk-free rate", 0.0, 1.0, 0.1))
 
 

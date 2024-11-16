@@ -6,3 +6,5 @@ scipy
 matplotlib
 mplfinance
 tushare
+polygon
+pandas_market_calendars
