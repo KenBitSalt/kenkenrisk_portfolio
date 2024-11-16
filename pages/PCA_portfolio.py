@@ -96,4 +96,4 @@ with col4:
                                                         bin = alt.BinParams(maxbins = 30)), 
                                                 y = 'count()') 
         # showing the histogram 
-        st.altair_chart(hist, key="alt_chart", on_select="rerun")
+        st.altair_chart(hist, key="alt_chart")
