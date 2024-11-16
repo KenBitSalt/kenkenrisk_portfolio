@@ -55,10 +55,6 @@ with col1:
     if use_preset != ":rainbow[use_preset]":
         uploaded_file = st.file_uploader("Must Cols: [stock_id]: ticker, [objective]: optimzation objective")
 
-    st.divider()
-
-    if st.button("Produce PCA portfolio"):
-        generation = True
 
 
 
@@ -91,7 +87,8 @@ with col2:
 
 st.divider()
 
-if generation:
+if st.button("Produce PCA portfolio"):
+
     import check_stock as cs
     index_hist = cs.get_daily(st.session_state.index,length = range)
     print(index_hist)
