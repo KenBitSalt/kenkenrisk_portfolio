@@ -5,6 +5,7 @@ import os
 import sys
 import altair as alt
 from vega_datasets import data
+import check_stock as cs
 
 myDir = os.getcwd()
 sys.path.append(myDir)
@@ -88,8 +89,6 @@ with col2:
 st.divider()
 
 if st.button("Produce PCA portfolio"):
-
-    import check_stock as cs
     index_hist = cs.get_daily(st.session_state.index,length = range)
     print(index_hist)
 
