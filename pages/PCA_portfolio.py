@@ -60,8 +60,7 @@ if use_preset != ":rainbow[use_preset]":
 
 st.divider()
 
-if st.button("Step2: Produce PCA portfolio", use_container_width=True):
-
+if st.button("Click: Produce PCA portfolio", use_container_width=True):
 
     if uploaded_file is not None:
         # To read file as bytes:
@@ -76,19 +75,21 @@ if st.button("Step2: Produce PCA portfolio", use_container_width=True):
 
     st.markdown("Using Pool of len: %s" % len(df))
 
-    hist = alt.Chart(df).mark_bar().encode(x = alt.X('objective', 
-                                                    bin = alt.BinParams(maxbins = 30)), 
-                                            y = 'count()') 
-    # showing the histogram 
-    st.altair_chart(hist, key="alt_chart")
+    col1, col2 = st.columns(2)
+    with col1:
+        hist = alt.Chart(df).mark_bar().encode(x = alt.X('objective', 
+                                                        bin = alt.BinParams(maxbins = 30)), 
+                                                y = 'count()') 
+        # showing the histogram 
+        st.altair_chart(hist, key="alt_chart")
 
 
     # get index performance
     index_hist = cs.get_daily(st.session_state.index,length = range)
     print(index_hist)
-
-    if (len(index_hist)>=1):
-        st.line_chart(index_hist, x="Date", y="Close")
+    with col2:
+        if (len(index_hist)>=1):
+            st.line_chart(index_hist, x="Date", y="Close")
 
     # get stock performance from each of the df
     for i in df['stock_id'].to_list():
