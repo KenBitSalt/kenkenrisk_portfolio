@@ -20,7 +20,7 @@ st.sidebar.markdown("# pca portfolio")
 # Store the initial value of widgets in session state
 st.session_state.visibility = "visible"
 st.session_state.disabled = False
-st.session_state.index = "SP500"
+st.session_state.index = "SPY"
 use_preset = False
 df = pd.DataFrame()
 col1, col2 = st.columns(2)
@@ -29,7 +29,7 @@ with col1:
     st.radio(
         "Select index as benchmark",
         key="index",
-        options=["CSI-500", "SP500"],
+        options=["CSI500", "SPY"],
     )
 
     st.radio(
@@ -37,6 +37,8 @@ with col1:
         key="direction",
         options=["Maximize", "Minimize"],
     )
+
+    range = int(st.slider("Set backtest range", 120, 500, 250))
 
     use_preset = st.checkbox("Use preset pool")
 
@@ -48,7 +50,7 @@ with col1:
 with col2:
 
     if use_preset:
-        df = gp.pool(max=5000).get_df()
+        df = gp.pool(range=range, max=5000).get_df()
         st.markdown("Using Preset Pool of len: %s" % len(df))
         st.dataframe(df)
     else:
@@ -68,3 +70,14 @@ with col2:
 
 
 st.divider()
+
+if st.session_state.index in ["SPY","CSI500"]:
+    import check_stock as cs
+    if st.session_state.index == "SPY":
+        index_hist = cs.get_daily("SPY",length = range)
+
+col3, col4 = st.columns(2)
+
+with col3:
+    st.line_chart(index_hist, x="Date", y="Close")
+

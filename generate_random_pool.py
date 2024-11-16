@@ -9,7 +9,9 @@ default_data_api = "tushare"
 tushare_token = "88496aa09c93288465c2695e8ebf44f51442e0c7d3756d6485df3baa"
 
 class pool:
-    def __init__(self, market = "U.S.", method = "undefined", date = "today", max = 5000, dist = (-0.1,0.8,0.1)):
+    def __init__(self, range = 256, market = "U.S.", method = "undefined", date = "today", max = 5000, dist = (-0.1,0.8,0.1)):
+        self.range = range
+        # update so that filter out stocks outside of date range later
         self.market = market
         self.max = max
         self.dist = dist
@@ -38,6 +40,7 @@ class pool:
     
     def get_ticker(self):
         potential_list = pd.read_csv("sample_tickers.csv")["ticker"].to_list()
+        # add only al those that are over days
         if self.max > len(potential_list):
             return random.sample(potential_list, len(potential_list))
         else:
