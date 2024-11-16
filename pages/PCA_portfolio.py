@@ -27,58 +27,41 @@ df = pd.DataFrame()
 uploaded_file = None
 
 
-col1, col2 = st.columns(2)
 
-with col1:
-    st.radio(
-        "Select index as benchmark",
-        key="index",
-        options=["SPY", "CSI500"],
-    )
+st.radio(
+    "Select index as benchmark",
+    key="index",
+    options=["SPY", "CSI500"],
+)
 
-    st.radio(
-        "Maximize or minimize optimization objective",
-        key="direction",
-        options=["Maximize", "Minimize"],
-    )
+st.radio(
+    "Maximize or minimize optimization objective",
+    key="direction",
+    options=["Maximize", "Minimize"],
+)
 
-    range = int(st.slider("Set backtest range", 182, 730, 365))
+range = int(st.slider("Set backtest range", 182, 730, 365))
 
 
-    use_preset = st.radio(
-        "Portfolio Stock Pool from:",
-        [":rainbow[use_preset]", "***User-Provided***"],
-        captions=[
-            "A randomly generated pool",
-            "upload csv file.",
-        ],
-    )
+use_preset = st.radio(
+    "Portfolio Stock Pool from:",
+    [":rainbow[use_preset]", "***User-Provided***"],
+    captions=[
+        "A randomly generated pool",
+        "upload csv file.",
+    ],
+)
 
-    #st.markdown("OR upload csv file containing stock pool and optimized objective for each item By UNCHECKING the previous box")
-    if use_preset != ":rainbow[use_preset]":
-        uploaded_file = st.file_uploader("Must Cols: [stock_id]: ticker, [objective]: optimzation objective")
+#st.markdown("OR upload csv file containing stock pool and optimized objective for each item By UNCHECKING the previous box")
+if use_preset != ":rainbow[use_preset]":
+    uploaded_file = st.file_uploader("Must Cols: [stock_id]: ticker, [objective]: optimzation objective")
 
-
-
-
-with col2:
-
-    if (len(df)>=1):
-        st.markdown("Using Pool of len: %s" % len(df))
-
-    if (len(df)>=1):
-        hist = alt.Chart(df).mark_bar().encode(x = alt.X('objective', 
-                                                        bin = alt.BinParams(maxbins = 30)), 
-                                                y = 'count()') 
-        # showing the histogram 
-        st.altair_chart(hist, key="alt_chart")
-
-        
 
 
 st.divider()
 
 if st.button("Step2: Produce PCA portfolio", use_container_width=True):
+
 
     if uploaded_file is not None:
         # To read file as bytes:
@@ -88,7 +71,18 @@ if st.button("Step2: Produce PCA portfolio", use_container_width=True):
         df = pd.read_csv(uploaded_file)
 
     # reproduce pool
-    df = gp.pool(range=range, max=6000).get_df()
+    else:
+        df = gp.pool(range=range, max=6000).get_df()
+
+    st.markdown("Using Pool of len: %s" % len(df))
+
+    hist = alt.Chart(df).mark_bar().encode(x = alt.X('objective', 
+                                                    bin = alt.BinParams(maxbins = 30)), 
+                                            y = 'count()') 
+    # showing the histogram 
+    st.altair_chart(hist, key="alt_chart")
+
+
     # get index performance
     index_hist = cs.get_daily(st.session_state.index,length = range)
     print(index_hist)
