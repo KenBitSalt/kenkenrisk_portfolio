@@ -25,6 +25,7 @@ st.session_state.visibility = "visible"
 st.session_state.disabled = False
 df = pd.DataFrame()
 uploaded_file = None
+show_pool = False
 col1, col2 = st.columns(2)
 
 with col1:
@@ -62,8 +63,10 @@ with col1:
 with col2:
 
     if (use_preset == ":rainbow[use_preset]") & (st.button("Reproduce Pool")):
-        df = gp.pool(range=range, max=5000).get_df()
-        st.markdown("Using Preset Pool of len: %s" % len(df))
+        show_pool = True
+        if show_pool:
+            df = gp.pool(range=range, max=5000).get_df()
+            st.markdown("Using Preset Pool of len: %s" % len(df))
     else:
         st.write("Using User-Designated Pool")
 
