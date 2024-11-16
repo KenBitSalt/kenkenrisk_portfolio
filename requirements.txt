@@ -8,3 +8,5 @@ mplfinance
 tushare
 polygon
 pandas_market_calendars
+altair
+vega_datasets
