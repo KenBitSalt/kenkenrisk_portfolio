@@ -66,6 +66,5 @@ with col2:
             hide_index=False,
         )
 
-    
 
 st.divider()
