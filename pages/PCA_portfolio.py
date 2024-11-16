@@ -91,7 +91,7 @@ with col2:
 
 st.divider()
 
-if st.button("Step2: Produce PCA portfolio"):
+if st.button("Step2: Produce PCA portfolio", use_container_width=True):
     index_hist = cs.get_daily(st.session_state.index,length = range)
     print(index_hist)
 
