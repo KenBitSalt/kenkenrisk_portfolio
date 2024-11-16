@@ -22,8 +22,6 @@ st.sidebar.markdown("# pca portfolio")
 # Store the initial value of widgets in session state
 st.session_state.visibility = "visible"
 st.session_state.disabled = False
-st.session_state.index = "SPY"
-st.session_state.use_preset = True
 df = pd.DataFrame()
 uploaded_file = None
 col1, col2 = st.columns(2)
@@ -32,7 +30,7 @@ with col1:
     st.radio(
         "Select index as benchmark",
         key="index",
-        options=["CSI500", "SPY"],
+        options=["SPY", "CSI500"],
     )
 
     st.radio(
