@@ -26,35 +26,38 @@ st.session_state.disabled = False
 df = pd.DataFrame()
 uploaded_file = None
 
+col1, col2 = st.columns(2)
+
+with col1:
+    st.radio(
+        "Select index as benchmark",
+        key="index",
+        options=["SPY", "CSI500"],
+    )
+
+    st.radio(
+        "Maximize or minimize optimization objective",
+        key="direction",
+        options=["Maximize", "Minimize"],
+    )
 
 
-st.radio(
-    "Select index as benchmark",
-    key="index",
-    options=["SPY", "CSI500"],
-)
-
-st.radio(
-    "Maximize or minimize optimization objective",
-    key="direction",
-    options=["Maximize", "Minimize"],
-)
-
-range = int(st.slider("Set backtest range", 182, 730, 365))
+with col2:
+    range = int(st.slider("Set backtest range", 182, 730, 365))
 
 
-use_preset = st.radio(
-    "Portfolio Stock Pool from:",
-    [":rainbow[use_preset]", "***User-Provided***"],
-    captions=[
-        "A randomly generated pool",
-        "upload csv file.",
-    ],
-)
+    use_preset = st.radio(
+        "Portfolio Stock Pool from:",
+        [":rainbow[use_preset]", "***User-Provided***"],
+        captions=[
+            "A randomly generated pool",
+            "upload csv file.",
+        ],
+    )
 
-#st.markdown("OR upload csv file containing stock pool and optimized objective for each item By UNCHECKING the previous box")
-if use_preset != ":rainbow[use_preset]":
-    uploaded_file = st.file_uploader("Must Cols: [stock_id]: ticker, [objective]: optimzation objective")
+    #st.markdown("OR upload csv file containing stock pool and optimized objective for each item By UNCHECKING the previous box")
+    if use_preset != ":rainbow[use_preset]":
+        uploaded_file = st.file_uploader("Must Cols: [stock_id]: ticker, [objective]: optimzation objective")
 
 
 
