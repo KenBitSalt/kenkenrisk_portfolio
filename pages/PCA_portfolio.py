@@ -97,7 +97,7 @@ if st.button("Click: Produce PCA portfolio", use_container_width=True):
     # get stock performance from each of the df
     progress_text = "Query stock daily close, please wait."
     my_bar = st.progress(0, text=progress_text)
-    for i in range(len(df['stock_id'].to_list())):
+    for i in range(len(df)):
         stock = df['stock_id'].to_list()[i]
         my_bar.progress(i + 1, text=progress_text)
         stock_df = cs.get_daily(stock,length=range)
