@@ -10,6 +10,7 @@ def get_daily(ticker,length=256):
     # Get the calendar for the New York Stock Exchange (NYSE)
     nyse = mcal.get_calendar('NYSE')
     late = nyse.schedule(start_date='2024-11-01', end_date=today)
+    # The previous market date ([-2]) ensures existence of data
     latest_trade_day = mcal.date_range(late, frequency='1D')[-2].strftime('%Y-%m-%d')
     stock = yf.Ticker(ticker)
     # GET TODAYS DATE AND CONVERT IT TO A STRING WITH YYYY-MM-DD FORMAT (YFINANCE EXPECTS THAT FORMAT)

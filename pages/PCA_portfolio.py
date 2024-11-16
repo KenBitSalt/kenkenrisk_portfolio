@@ -3,6 +3,8 @@ from io import StringIO
 import pandas as pd
 import os 
 import sys
+import altair as alt
+from vega_datasets import data
 
 myDir = os.getcwd()
 sys.path.append(myDir)
@@ -81,3 +83,10 @@ col3, col4 = st.columns(2)
 with col3:
     st.line_chart(index_hist, x="Date", y="Close")
 
+with col4:
+    if df is not None:
+        hist = alt.Chart(dataframe).mark_bar().encode(x = alt.X('objective', 
+                                                        bin = alt.BinParams(maxbins = 30)), 
+                                                y = 'count()') 
+    # showing the histogram 
+        st.altair_chart(hist, key="alt_chart", on_select="rerun")
