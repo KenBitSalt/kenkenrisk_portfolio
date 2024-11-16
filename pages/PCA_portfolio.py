@@ -39,7 +39,7 @@ with col1:
         options=["Maximize", "Minimize"],
     )
 
-    range = int(st.slider("Set backtest range", 120, 500, 365))
+    range = int(st.slider("Set backtest range", 182, 730, 365))
 
 
     use_preset = st.radio(
@@ -62,7 +62,6 @@ with col2:
     if use_preset == ":rainbow[use_preset]":
         df = gp.pool(range=range, max=5000).get_df()
         st.markdown("Using Preset Pool of len: %s" % len(df))
-        st.dataframe(df)
     else:
         st.write("Using User-Designated Pool")
 
@@ -73,30 +72,25 @@ with col2:
         # Can be used wherever a "file-like" object is accepted:
         dataframe = pd.read_csv(uploaded_file)
         st.markdown("User Uploaded Pool of len: %s" % len(dataframe))
-        st.dataframe(
-            dataframe,
-            hide_index=False,
-        )
 
+    if st.session_state.index in ["SPY","CSI500"]:
+        import check_stock as cs
+        if st.session_state.index == "SPY":
+            index_hist = cs.get_daily("SPY",length = range)
+            print(index_hist)
 
-st.divider()
-
-if st.session_state.index in ["SPY","CSI500"]:
-    import check_stock as cs
-    if st.session_state.index == "SPY":
-        index_hist = cs.get_daily("SPY",length = range)
-        print(index_hist)
-
-col3, col4 = st.columns(2)
-
-with col3:
     if (len(index_hist)>=1):
         st.line_chart(index_hist, x="Date", y="Close")
 
-with col4:
     if (use_preset == ":rainbow[use_preset]") & (len(df)>=1):
         hist = alt.Chart(df).mark_bar().encode(x = alt.X('objective', 
                                                         bin = alt.BinParams(maxbins = 30)), 
                                                 y = 'count()') 
         # showing the histogram 
         st.altair_chart(hist, key="alt_chart")
+
+        
+
+
+st.divider()
+
