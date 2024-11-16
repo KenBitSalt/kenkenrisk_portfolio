@@ -64,7 +64,7 @@ with col1:
 with col2:
 
     if (use_preset == ":rainbow[use_preset]") :
-        if (st.button("Step1: Reproduce Pool")):
+        if (st.button("Step1: Reproduce Pool", use_container_width=True)):
             df = gp.pool(range=range, max=5000).get_df()
         st.markdown("Using Preset Pool of len: %s" % len(df))
     else:
