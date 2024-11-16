@@ -96,5 +96,7 @@ if st.button("Click: Produce PCA portfolio", use_container_width=True):
 
     # get stock performance from each of the df
     for i in df['stock_id'].to_list():
-        st.write(i)
+        stock_df = cs.get_daily(i,length=range)
+        if len(stock_df) != len(index_hist):
+            st.write("%s is shit" % i)
 
