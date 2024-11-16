@@ -83,12 +83,17 @@ if st.session_state.index in ["SPY","CSI500"]:
 col3, col4 = st.columns(2)
 
 with col3:
-    st.line_chart(index_hist, x="Date", y="Close")
+    if (len(index_hist)>=1):
+        st.dataframe(
+            index_hist,
+            hide_index=False,
+        )
+        st.line_chart(index_hist, x="Date", y="Close")
 
 with col4:
     if (use_preset) & (len(df)>=1):
         hist = alt.Chart(df).mark_bar().encode(x = alt.X('objective', 
                                                         bin = alt.BinParams(maxbins = 30)), 
                                                 y = 'count()') 
-    # showing the histogram 
+        # showing the histogram 
         st.altair_chart(hist, key="alt_chart", on_select="rerun")
