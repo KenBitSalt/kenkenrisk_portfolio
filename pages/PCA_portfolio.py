@@ -102,7 +102,7 @@ if st.button("Click: Produce PCA portfolio", use_container_width=True):
 
     for i in range(len(df)):
         stock = df['stock_id'].to_list()[i]
-        stock_df = cs.get_daily(i,length=range_date)
+        stock_df = cs.get_daily(stock,length=range_date)
         my_bar.progress(i + 1, text=progress_text)
         if len(stock_df) != len(index_hist):
             st.write("%s is shit" % i)
