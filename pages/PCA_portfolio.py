@@ -43,7 +43,7 @@ with col1:
 
 
     use_preset = st.radio(
-        "What's your favorite movie genre",
+        "Portfolio Stock Pool from:",
         [":rainbow[use_preset]", "***User-Provided***"],
         captions=[
             "A randomly generated pool",
