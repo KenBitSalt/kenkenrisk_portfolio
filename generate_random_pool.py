@@ -31,6 +31,7 @@ class pool:
         self.objective_list = self.assign_objective()
         self.result = pd.DataFrame(list(zip(self.pool_list, self.objective_list)),
                columns =['stock_id', 'objective'])
+        self.result['stock_id'] = self.result['stock_id'].astype(str)
 
     def print_brief(self):
         print(self.market,self.method,self.date,self.max,self.dist,len(self.pool_list))

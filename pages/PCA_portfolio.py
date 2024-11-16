@@ -39,7 +39,7 @@ with col1:
         options=["Maximize", "Minimize"],
     )
 
-    range = int(st.slider("Set backtest range", 120, 500, 250))
+    range = int(st.slider("Set backtest range", 120, 500, 365))
 
 
     use_preset = st.radio(
