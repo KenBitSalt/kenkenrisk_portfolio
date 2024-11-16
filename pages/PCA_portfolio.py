@@ -43,7 +43,7 @@ with col1:
 
 
 with col2:
-    range = int(st.slider("Set backtest range", 182, 730, 365))
+    range_date = int(st.slider("Set backtest range", 182, 730, 365))
 
 
     use_preset = st.radio(
@@ -74,7 +74,7 @@ if st.button("Click: Produce PCA portfolio", use_container_width=True):
 
     # reproduce pool
     else:
-        df = gp.pool(range=range, max=6000).get_df()
+        df = gp.pool(range=range_date, max=6000).get_df()
 
     st.markdown("Using Pool of len: %s" % len(df))
 
@@ -88,7 +88,7 @@ if st.button("Click: Produce PCA portfolio", use_container_width=True):
 
 
     # get index performance
-    index_hist = cs.get_daily(st.session_state.index,length = range)
+    index_hist = cs.get_daily(st.session_state.index,length = range_date)
     print(index_hist)
     with col2:
         if (len(index_hist)>=1):
@@ -102,7 +102,7 @@ if st.button("Click: Produce PCA portfolio", use_container_width=True):
 
     for i in range(len(df)):
         stock = df['stock_id'].to_list()[i]
-        stock_df = cs.get_daily(i,length=range)
+        stock_df = cs.get_daily(i,length=range_date)
         my_bar.progress(i + 1, text=progress_text)
         if len(stock_df) != len(index_hist):
             st.write("%s is shit" % i)
