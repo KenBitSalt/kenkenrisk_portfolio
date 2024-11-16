@@ -100,4 +100,6 @@ if st.button("Step2: Produce PCA portfolio", use_container_width=True):
         st.line_chart(index_hist, x="Date", y="Close")
 
     # get stock performance from each of the df
+    for i in df['stock_id'].to_list():
+        st.write(i)
 
