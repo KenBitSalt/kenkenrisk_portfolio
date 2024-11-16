@@ -55,6 +55,11 @@ with col1:
     if use_preset != ":rainbow[use_preset]":
         uploaded_file = st.file_uploader("Must Cols: [stock_id]: ticker, [objective]: optimzation objective")
 
+    st.divider()
+
+    if st.button("Produce PCA portfolio"):
+        generation = True
+
 
 
 with col2:
@@ -73,11 +78,6 @@ with col2:
         dataframe = pd.read_csv(uploaded_file)
         st.markdown("User Uploaded Pool of len: %s" % len(dataframe))
 
-    if st.session_state.index in ["SPY","CSI500"]:
-        import check_stock as cs
-        if st.session_state.index == "SPY":
-            index_hist = cs.get_daily("SPY",length = range)
-            print(index_hist)
 
     if (len(index_hist)>=1):
         st.line_chart(index_hist, x="Date", y="Close")
@@ -93,4 +93,11 @@ with col2:
 
 
 st.divider()
+
+if generation:
+    if st.session_state.index in ["SPY","CSI500"]:
+            import check_stock as cs
+            if st.session_state.index == "SPY":
+                index_hist = cs.get_daily("SPY",length = range)
+                print(index_hist)
 
