@@ -79,9 +79,6 @@ with col2:
         st.markdown("User Uploaded Pool of len: %s" % len(dataframe))
 
 
-    if (len(index_hist)>=1):
-        st.line_chart(index_hist, x="Date", y="Close")
-
     if (use_preset == ":rainbow[use_preset]") & (len(df)>=1):
         hist = alt.Chart(df).mark_bar().encode(x = alt.X('objective', 
                                                         bin = alt.BinParams(maxbins = 30)), 
@@ -95,9 +92,10 @@ with col2:
 st.divider()
 
 if generation:
-    if st.session_state.index in ["SPY","CSI500"]:
-            import check_stock as cs
-            if st.session_state.index == "SPY":
-                index_hist = cs.get_daily("SPY",length = range)
-                print(index_hist)
+    import check_stock as cs
+    index_hist = cs.get_daily(st.session_state.index,length = range)
+    print(index_hist)
+
+    if (len(index_hist)>=1):
+        st.line_chart(index_hist, x="Date", y="Close")
 
