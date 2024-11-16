@@ -23,7 +23,7 @@ st.sidebar.markdown("# pca portfolio")
 st.session_state.visibility = "visible"
 st.session_state.disabled = False
 st.session_state.index = "SPY"
-use_preset = True
+st.session_state.use_preset = True
 df = pd.DataFrame()
 uploaded_file = None
 col1, col2 = st.columns(2)
@@ -43,7 +43,9 @@ with col1:
 
     range = int(st.slider("Set backtest range", 120, 500, 250))
 
-    use_preset = st.checkbox("Use preset pool")
+    use_preset = st.checkbox("Use preset pool",
+                             key = "use_preset"
+                             )
 
     st.markdown("OR upload csv file containing stock pool and optimized objective for each item By UNCHECKING the previous box")
     if not use_preset:
@@ -84,10 +86,6 @@ col3, col4 = st.columns(2)
 
 with col3:
     if (len(index_hist)>=1):
-        st.dataframe(
-            index_hist,
-            hide_index=False,
-        )
         st.line_chart(index_hist, x="Date", y="Close")
 
 with col4:
