@@ -79,6 +79,7 @@ if st.session_state.index in ["SPY","CSI500"]:
     import check_stock as cs
     if st.session_state.index == "SPY":
         index_hist = cs.get_daily("SPY",length = range)
+        print(index_hist)
 
 col3, col4 = st.columns(2)
 

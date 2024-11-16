@@ -4,7 +4,7 @@ import datetime
 import pandas_market_calendars as mcal
 
 
-def get_daily(ticker,length=256):
+def get_daily(ticker,length=365):
     today = datetime.datetime.now().strftime('%Y-%m-%d')
     start = (datetime.datetime.now() - datetime.timedelta(days=length)).strftime('%Y-%m-%d')
     # Get the calendar for the New York Stock Exchange (NYSE)
@@ -18,4 +18,5 @@ def get_daily(ticker,length=256):
     stock_hist = stock.history(start=start,end=latest_trade_day)
     #stock_hist['Date'] = stock_hist.index
     stock_hist = stock_hist.reset_index(drop = False)
+    stock_hist['Date'] = stock_hist['Date'].astype(str)
     return stock_hist
