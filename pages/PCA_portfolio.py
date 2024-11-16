@@ -44,8 +44,9 @@ with col1:
 
     use_preset = st.checkbox("Use preset pool")
 
-    st.markdown("OR upload csv file containing stock pool and optimized objective for each item")
-    uploaded_file = st.file_uploader("Must Cols: [stock_id]: ticker, [objective]: optimzation objective")
+    st.markdown("OR upload csv file containing stock pool and optimized objective for each item By UNCHECKING the previous box")
+    if not use_preset:
+        uploaded_file = st.file_uploader("Must Cols: [stock_id]: ticker, [objective]: optimzation objective")
 
 
 
@@ -85,7 +86,7 @@ with col3:
 
 with col4:
     if df is not None:
-        hist = alt.Chart(dataframe).mark_bar().encode(x = alt.X('objective', 
+        hist = alt.Chart(df).mark_bar().encode(x = alt.X('objective', 
                                                         bin = alt.BinParams(maxbins = 30)), 
                                                 y = 'count()') 
     # showing the histogram 
