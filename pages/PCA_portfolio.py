@@ -63,21 +63,8 @@ with col1:
 
 with col2:
 
-    if (use_preset == ":rainbow[use_preset]") :
-        if (st.button("Step1: Reproduce Pool", use_container_width=True)):
-            df = gp.pool(range=range, max=6000).get_df()
-        st.markdown("Using Preset Pool of len: %s" % len(df))
-    else:
-        st.write("Using User-Designated Pool")
-
-    if uploaded_file is not None:
-        # To read file as bytes:
-        bytes_data = uploaded_file.getvalue()
-        # To convert to a string based IO:
-        # Can be used wherever a "file-like" object is accepted:
-        df = pd.read_csv(uploaded_file)
-        st.markdown("Using Uploaded Pool of len: %s" % len(df))
-
+    if (len(df)>=1):
+        st.markdown("Using Pool of len: %s" % len(df))
 
     if (len(df)>=1):
         hist = alt.Chart(df).mark_bar().encode(x = alt.X('objective', 
@@ -92,6 +79,16 @@ with col2:
 st.divider()
 
 if st.button("Step2: Produce PCA portfolio", use_container_width=True):
+
+    if uploaded_file is not None:
+        # To read file as bytes:
+        bytes_data = uploaded_file.getvalue()
+        # To convert to a string based IO:
+        # Can be used wherever a "file-like" object is accepted:
+        df = pd.read_csv(uploaded_file)
+
+    # reproduce pool
+    df = gp.pool(range=range, max=6000).get_df()
     # get index performance
     index_hist = cs.get_daily(st.session_state.index,length = range)
     print(index_hist)
