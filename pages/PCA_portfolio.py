@@ -95,13 +95,18 @@ if st.button("Click: Produce PCA portfolio", use_container_width=True):
             st.line_chart(index_hist, x="Date", y="Close")
 
     # get stock performance from each of the df
-    progress_text = "Query stock daily close, please wait."
+
+    progress_text = "Operation in progress. Please wait."
     my_bar = st.progress(0, text=progress_text)
+
+
     for i in range(len(df)):
         stock = df['stock_id'].to_list()[i]
+        stock_df = cs.get_daily(i,length=range)
         my_bar.progress(i + 1, text=progress_text)
-        stock_df = cs.get_daily(stock,length=range)
         if len(stock_df) != len(index_hist):
-            st.write("%s is shit" % stock)
+            st.write("%s is shit" % i)
+
     my_bar.empty()
+
 
