@@ -20,30 +20,7 @@ visible_strike = False
 
 def check_integrity(stock_id,Market,Type,Model,Strike_Price,age):
     # check conditions
-    if (isinstance(stock_id, str)) & (len(stock_id) > 0):
-        if isinstance(Market, str):
-            if isinstance(Type, str):
-                if isinstance(Model, str):
-                    if isinstance(Strike_Price, float):
-                        if isinstance(age, int):
-                            return True
-                        else:
-                            st.write('age issue')
-                            return False
-                    else:
-                        st.write('Strike price issue')
-                        return False
-                else: 
-                    st.write('Model issue')
-                    return False
-            else:
-                st.write('Type issue')
-                return False
-        else:
-            st.write('Market issue')
-            return False
-    else:
-        return False
+    return True
 
 st.markdown("# Option pricing")
 st.sidebar.markdown("# option pricing")
@@ -119,12 +96,9 @@ with col2:
 
 
     if ("stock_id" in st.session_state) & (len(st.session_state.stock_id) >= 1) :
-        if check_integrity(st.session_state.stock_id,st.session_state.Market,st.session_state.Type,st.session_state.Model,Strike_Price,age):
-            st.markdown("-- PLEASE REFER TO THE RESULT --")
-            show = True
-
-        else:
-            st.write("Data is not integral, try again")
+        #if check_integrity(st.session_state.stock_id,st.session_state.Market,st.session_state.Type,st.session_state.Model,Strike_Price,age):
+        st.markdown("-- PLEASE REFER TO THE RESULT --")
+        show = True
 
 st.divider()
 
