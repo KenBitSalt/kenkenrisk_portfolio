@@ -16,5 +16,6 @@ def get_daily(ticker,length=256):
     # GET TODAYS DATE AND CONVERT IT TO A STRING WITH YYYY-MM-DD FORMAT (YFINANCE EXPECTS THAT FORMAT)
 
     stock_hist = stock.history(start=start,end=latest_trade_day)
+    #stock_hist['Date'] = stock_hist.index
     stock_hist = stock_hist.reset_index(drop = False)
     return stock_hist
