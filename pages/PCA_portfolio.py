@@ -65,7 +65,7 @@ with col2:
 
     if (use_preset == ":rainbow[use_preset]") :
         if (st.button("Step1: Reproduce Pool", use_container_width=True)):
-            df = gp.pool(range=range, max=5000).get_df()
+            df = gp.pool(range=range, max=6000).get_df()
         st.markdown("Using Preset Pool of len: %s" % len(df))
     else:
         st.write("Using User-Designated Pool")
@@ -75,11 +75,11 @@ with col2:
         bytes_data = uploaded_file.getvalue()
         # To convert to a string based IO:
         # Can be used wherever a "file-like" object is accepted:
-        dataframe = pd.read_csv(uploaded_file)
-        st.markdown("User Uploaded Pool of len: %s" % len(dataframe))
+        df = pd.read_csv(uploaded_file)
+        st.markdown("Using Uploaded Pool of len: %s" % len(df))
 
 
-    if (use_preset == ":rainbow[use_preset]") & (len(df)>=1):
+    if (len(df)>=1):
         hist = alt.Chart(df).mark_bar().encode(x = alt.X('objective', 
                                                         bin = alt.BinParams(maxbins = 30)), 
                                                 y = 'count()') 
@@ -92,9 +92,12 @@ with col2:
 st.divider()
 
 if st.button("Step2: Produce PCA portfolio", use_container_width=True):
+    # get index performance
     index_hist = cs.get_daily(st.session_state.index,length = range)
     print(index_hist)
 
     if (len(index_hist)>=1):
         st.line_chart(index_hist, x="Date", y="Close")
+
+    # get stock performance from each of the df
 
