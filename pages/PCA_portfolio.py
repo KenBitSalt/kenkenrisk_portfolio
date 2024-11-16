@@ -23,7 +23,7 @@ st.sidebar.markdown("# pca portfolio")
 st.session_state.visibility = "visible"
 st.session_state.disabled = False
 st.session_state.index = "SPY"
-use_preset = False
+use_preset = True
 df = pd.DataFrame()
 uploaded_file = None
 col1, col2 = st.columns(2)
