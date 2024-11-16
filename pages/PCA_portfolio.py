@@ -41,19 +41,25 @@ with col1:
 
     range = int(st.slider("Set backtest range", 120, 500, 250))
 
-    use_preset = st.checkbox("Use preset pool",
-                             key = "use_preset"
-                             )
 
-    st.markdown("OR upload csv file containing stock pool and optimized objective for each item By UNCHECKING the previous box")
-    if not use_preset:
+    use_preset = st.radio(
+        "What's your favorite movie genre",
+        [":rainbow[use_preset]", "***User-Provided***"],
+        captions=[
+            "A randomly generated pool",
+            "upload csv file.",
+        ],
+    )
+
+    #st.markdown("OR upload csv file containing stock pool and optimized objective for each item By UNCHECKING the previous box")
+    if use_preset != ":rainbow[use_preset]":
         uploaded_file = st.file_uploader("Must Cols: [stock_id]: ticker, [objective]: optimzation objective")
 
 
 
 with col2:
 
-    if use_preset:
+    if use_preset == ":rainbow[use_preset]":
         df = gp.pool(range=range, max=5000).get_df()
         st.markdown("Using Preset Pool of len: %s" % len(df))
         st.dataframe(df)
@@ -88,7 +94,7 @@ with col3:
         st.line_chart(index_hist, x="Date", y="Close")
 
 with col4:
-    if (use_preset) & (len(df)>=1):
+    if (use_preset == ":rainbow[use_preset]") & (len(df)>=1):
         hist = alt.Chart(df).mark_bar().encode(x = alt.X('objective', 
                                                         bin = alt.BinParams(maxbins = 30)), 
                                                 y = 'count()') 

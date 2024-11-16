@@ -1,6 +1,5 @@
 import numpy as np
 import scipy.stats as si
-from datetime import datetime
 
 def calculate_historical_volatility(stock_data, window=256):
     window = len(stock_data)
