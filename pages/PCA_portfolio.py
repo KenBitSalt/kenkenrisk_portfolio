@@ -25,6 +25,7 @@ st.session_state.disabled = False
 st.session_state.index = "SPY"
 use_preset = False
 df = pd.DataFrame()
+uploaded_file = None
 col1, col2 = st.columns(2)
 
 with col1:
@@ -85,7 +86,7 @@ with col3:
     st.line_chart(index_hist, x="Date", y="Close")
 
 with col4:
-    if df is not None:
+    if (use_preset) & len(df>=1):
         hist = alt.Chart(df).mark_bar().encode(x = alt.X('objective', 
                                                         bin = alt.BinParams(maxbins = 30)), 
                                                 y = 'count()') 
