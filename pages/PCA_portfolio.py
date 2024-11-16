@@ -64,7 +64,7 @@ with col1:
 with col2:
 
     if (use_preset == ":rainbow[use_preset]") :
-        if (st.button("Reproduce Pool")):
+        if (st.button("Step1: Reproduce Pool")):
             df = gp.pool(range=range, max=5000).get_df()
         st.markdown("Using Preset Pool of len: %s" % len(df))
     else:
@@ -91,7 +91,7 @@ with col2:
 
 st.divider()
 
-if st.button("Produce PCA portfolio"):
+if st.button("Step2: Produce PCA portfolio"):
     index_hist = cs.get_daily(st.session_state.index,length = range)
     print(index_hist)
 
