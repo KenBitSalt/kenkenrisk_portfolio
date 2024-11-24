@@ -1,5 +1,5 @@
 import scipy 
-
+import sklearn as sk
 
 # input 1: a list of index benchmark's percentage changr in a given period
 # input 2: a matrix of pool's percentage change in the same period
@@ -16,4 +16,8 @@ class PCA_portfolio:
         self.objectivce = objective
     
     def find_weight(self):
+        pass
+
+
+    def get_eigen_values(self):
         pass

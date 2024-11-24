@@ -4,8 +4,11 @@ import datetime
 import pandas_market_calendars as mcal
 
 
-def get_daily(ticker,length=365):
-    today = datetime.datetime.now().strftime('%Y-%m-%d')
+def get_daily(ticker,end="today",length=365):
+    if end == "today":
+        today = datetime.datetime.now().strftime('%Y-%m-%d')
+    else:
+        today = "2024-11-19"
     start = (datetime.datetime.now() - datetime.timedelta(days=length)).strftime('%Y-%m-%d')
     # Get the calendar for the New York Stock Exchange (NYSE)
     nyse = mcal.get_calendar('NYSE')
