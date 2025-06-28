@@ -53,7 +53,7 @@ with col1:
     )
 
     age = int(st.slider("Set month until expiration", 0, 36, 12))
-    risk_free = float(st.slider("Set risk-free rate", 0.0, 1.0, 0.1))
+    risk_free = float(st.slider("Set risk-free rate", 0.0, 0.15, 0.1))
 
 
 with col2:
