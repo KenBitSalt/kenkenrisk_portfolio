@@ -1,3 +1,6 @@
+### returns 
+
+
 import yfinance as yf
 import tushare as ts
 import datetime
@@ -8,7 +11,7 @@ def get_daily(ticker,end="today",length=365):
     if end == "today":
         today = datetime.datetime.now().strftime('%Y-%m-%d')
     else:
-        today = "2024-11-19"
+        today = "2025-06-19"
     start = (datetime.datetime.now() - datetime.timedelta(days=length)).strftime('%Y-%m-%d')
     # Get the calendar for the New York Stock Exchange (NYSE)
     nyse = mcal.get_calendar('NYSE')

@@ -59,3 +59,14 @@ class BlackScholesGreeks(BlackScholesModel):
     
     def rho_put(self):
         return -self.K * self.T * np.exp(-self.r * self.T) * si.norm.cdf(-self.d2(), 0.0, 1.0)
+
+
+
+
+class HestonModel:
+    def __init__(self, S, K, T, r, sigma):
+        self.S = S        # Underlying asset price
+        self.K = K        # Option strike price
+        self.T = T        # Time to expiration in years
+        self.r = r        # Risk-free interest rate
+        self.sigma = sigma  # Volatility of the underlying asset

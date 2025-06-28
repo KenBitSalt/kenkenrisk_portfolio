@@ -27,10 +27,15 @@ with col1:
         file_name="files/陈思懿简历.pdf",
         mime="text/csv",
     )
+        
+    
     st.markdown("My work and studies focus on secondary market derivatives and asset management.")
     st.markdown("contact me via:")
     st.markdown("- sc4793@columbia.edu")
     st.markdown("- (551)220-8597")
+
+
+    st.markdown("Also visit my wechat public account ***四十四二十二*** for equity derivatives analysis content written in Chinese.")
 
 
 with col2:

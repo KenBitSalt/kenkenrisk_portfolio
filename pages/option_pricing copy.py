@@ -91,7 +91,7 @@ with col2:
     st.radio(
         "Implemented Model for this calculation",
         key="Model",
-        options=["Black-Scholes", "others (not yet deployed)"],
+        options=["Black-Scholes", "Heston (not yet deployed)"],
     )
 
 
