@@ -26,8 +26,8 @@ with col1:
     steps = int(st.slider("Set simulation steps: ", 12, 365, 1))
     engine = MonteCarloEngine(S0=100, r=0.03, sigma=0.2, T=1, N=steps, M=simulation_times)
     paths = engine.simulate_paths()
-
-    show_sim_df = pd.DataFrame(paths,columns= steps)
+    sims = np.arange(1,len(paths)+1)
+    show_sim_df = pd.DataFrame(paths,columns= sims)
     st.line_chart(show_sim_df)
 
 with col2:
