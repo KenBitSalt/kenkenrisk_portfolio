@@ -1,8 +1,8 @@
 import numpy as np
 #import payoffs as pf
 
-import matplotlib.pyplot as plt
-import seaborn as sns
+#import matplotlib.pyplot as plt
+#import seaborn as sns
 
 
 
@@ -42,7 +42,7 @@ class MonteCarloEngine:
         payoffs = self.payoff_fn(self.paths)
         discounted = np.exp(-self.r * self.T) * payoffs
         return np.mean(discounted)
-    
+    '''
     def draw(self,save=False, type = "plot"):
         if type == "plot":
             for path in self.paths:
@@ -60,6 +60,9 @@ class MonteCarloEngine:
             plt.xlabel("Last Element")
             plt.ylabel("Frequency")
             plt.show()
+
+
+    '''
 
 
 '''
