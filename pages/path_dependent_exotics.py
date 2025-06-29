@@ -27,8 +27,8 @@ with col1:
     engine = MonteCarloEngine(S0=100, r=0.03, sigma=0.2, T=1, N=steps, M=simulation_times)
     paths = engine.simulate_paths()
 
-    show_sim_df = pd.DataFrame(np.arange(0, steps),paths)
-    print(show_sim_df.columns)
+    show_sim_df = pd.DataFrame(paths,columns= steps)
+    st.line_chart(show_sim_df)
 
 with col2:
     contract_type = st.radio(
