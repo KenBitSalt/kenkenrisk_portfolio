@@ -32,7 +32,7 @@ with col1:
 with col2:
     contract_type = st.radio(
     "Select contract genre: ",
-    [":accumulator[Comedy]", "***FCN***", "***cCN***"],
+    [":accumulator[Comedy]", "***FCN***", "***CCN***"],
     captions=[
         "雪球",
         "not done yet",

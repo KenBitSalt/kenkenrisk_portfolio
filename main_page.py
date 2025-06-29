@@ -36,7 +36,7 @@ with col1:
 
 
     st.markdown("Also visit my wechat public account ***四十四二十二*** for equity derivatives analysis content written in Chinese.")
-    st.markdown()
+    st.markdown("")
 
 with col2:
     st.image("files/me.jpg", caption="[Some digital portrait of arthur 2024]")
