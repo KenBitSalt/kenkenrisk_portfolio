@@ -26,7 +26,8 @@ with col1:
     steps = int(st.slider("Set simulation steps: ", 12, 365, 1))
     engine = MonteCarloEngine(S0=100, r=0.03, sigma=0.2, T=1, N=steps, M=simulation_times)
     engine.simulate_paths()
-    
+    print(steps)
+    print(engine.paths)
     show_sim_df = pd.DataFrame(np.arange(0, steps),engine.paths)
     print(show_sim_df.columns)
 
