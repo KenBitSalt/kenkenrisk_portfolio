@@ -33,3 +33,11 @@ def classic_snowball_payoff(paths, K_in=80, K_out=105, coupon=0.12, S0=100):
         else:
             payoff[i] = S0 * (1 + coupon)
     return payoff
+
+def DCN_payoff(paths, K_in=80, K_out=105, coupon=0.12, S0=100):
+    pass
+
+
+def FCN_payoff(paths, K_in=80, K_out=105, coupon=0.12, S0=100):
+    pass
+
