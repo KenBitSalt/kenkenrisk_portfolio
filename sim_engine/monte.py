@@ -44,84 +44,97 @@ class MonteCarloEngine:
         return np.mean(discounted)
     
 
-    def estimate_greeks_grid(self, epsilon=1, num_points=51):
-        assert num_points % 2 == 1, "num_points should be odd to center around current value."
+    def estimate_greeks_grid(self, epsilon=1.0, epsilon_sigma = 0.01, num_points=51):
+        assert num_points % 2 == 1, "num_points should be odd to center around current S0."
 
-        result = {}
+        original_S0 = self.S0
+        original_sigma = self.sigma
+        original_T = self.T
+        original_dt = self.dt
 
-        S0_center = self.S0
-        sigma_center = self.sigma
-        T_center = self.T
-
-        # === S0 GRID: for price, delta, gamma ===
-        S0_array = S0_center + epsilon * np.arange(-(num_points // 2), (num_points // 2) + 1)
-        price_S0 = []
+        # === S0 GRID ===
+        S0_array = original_S0 + epsilon * np.arange(-(num_points // 2), (num_points // 2) + 1)
+        price_array = []
+        delta_array = []
+        gamma_array = []
+        vega_array = []
+        vanna_array = []
 
         for S0 in S0_array:
+            # Base price at (S0, sigma)
             self.S0 = S0
+            self.sigma = original_sigma
             self.simulate_paths()
-            payoff = self.payoff_fn(self.paths)
-            price = np.exp(-self.r * self.T) * np.mean(payoff)
-            price_S0.append(price)
+            base_price = np.exp(-self.r * self.T) * np.mean(self.payoff_fn(self.paths))
+            price_array.append(base_price)
 
-        price_S0 = np.array(price_S0)
-        delta_array = np.gradient(price_S0, epsilon)
+        # === Delta & Gamma ===
+        delta_array = np.gradient(price_array, epsilon)
         gamma_array = np.gradient(delta_array, epsilon)
 
-        # === Sigma GRID: for vega ===
-        sigma_array = sigma_center + epsilon * np.arange(-(num_points // 2), (num_points // 2) + 1)
-        price_sigma = []
+        # === Vega: for each S0, perturb sigma ± ε once ===
+        for S0 in S0_array:
+            self.S0 = S0
 
-        self.S0 = S0_center  # reset
-        for sigma in sigma_array:
-            self.sigma = sigma
+            self.sigma = original_sigma + epsilon_sigma
             self.simulate_paths()
-            payoff = self.payoff_fn(self.paths)
-            price = np.exp(-self.r * self.T) * np.mean(payoff)
-            price_sigma.append(price)
+            price_up = np.exp(-self.r * self.T) * np.mean(self.payoff_fn(self.paths))
 
-        price_sigma = np.array(price_sigma)
-        vega_array = np.gradient(price_sigma, epsilon)
-
-        # === T GRID: for theta ===
-        T_array = T_center + epsilon * np.arange(-(num_points // 2), (num_points // 2) + 1)
-        price_T = []
-
-        self.sigma = sigma_center  # reset
-        for T in T_array:
-            if T <= 0:
-                price_T.append(np.nan)
-                continue
-            self.T = T
-            self.dt = T / self.N
+            self.sigma = original_sigma - epsilon_sigma
             self.simulate_paths()
-            payoff = self.payoff_fn(self.paths)
-            price = np.exp(-self.r * T) * np.mean(payoff)
-            price_T.append(price)
+            price_down = np.exp(-self.r * self.T) * np.mean(self.payoff_fn(self.paths))
 
-        price_T = np.array(price_T)
-        theta_array = -np.gradient(price_T, epsilon)
+            vega = (price_up - price_down) / (2 * epsilon_sigma)
+            vega_array.append(vega)
 
-        # Restore original values
-        self.S0 = S0_center
-        self.sigma = sigma_center
-        self.T = T_center
-        self.dt = T_center / self.N
 
-        result = {
-            "S0_array": S0_array,
-            "price_S0": price_S0,
-            "delta_array": delta_array,
-            "gamma_array": gamma_array,
-            "sigma_array": sigma_array,
-            "price_sigma": price_sigma,
-            "vega_array": vega_array,
-            "T_array": T_array,
-            "price_T": price_T,
-            "theta_array": theta_array
+            #vanna
+        for S0 in S0_array:
+            # === Delta under sigma+epsilon ===
+            self.sigma = original_sigma + epsilon_sigma
+
+            self.S0 = S0 + epsilon
+            self.simulate_paths()
+            price_up_up = np.exp(-self.r * self.T) * np.mean(self.payoff_fn(self.paths))
+
+            self.S0 = S0 - epsilon
+            self.simulate_paths()
+            price_up_down = np.exp(-self.r * self.T) * np.mean(self.payoff_fn(self.paths))
+
+            delta_up = (price_up_up - price_up_down) / (2 * epsilon)
+
+            # === Delta under sigma-epsilon ===
+            self.sigma = original_sigma - epsilon_sigma
+
+            self.S0 = S0 + epsilon
+            self.simulate_paths()
+            price_down_up = np.exp(-self.r * self.T) * np.mean(self.payoff_fn(self.paths))
+
+            self.S0 = S0 - epsilon
+            self.simulate_paths()
+            price_down_down = np.exp(-self.r * self.T) * np.mean(self.payoff_fn(self.paths))
+
+            delta_down = (price_down_up - price_down_down) / (2 * epsilon)
+
+            # === Vanna = diff of delta wrt sigma ===
+            vanna = (delta_up - delta_down) / (2 * epsilon_sigma)
+            vanna_array.append(vanna)
+
+        # Restore
+        self.S0 = original_S0
+        self.sigma = original_sigma
+        self.T = original_T
+        self.dt = original_dt
+
+        return {
+            "S0_array": np.array(S0_array),
+            "price_array": np.array(price_array),
+            "delta_array": np.array(delta_array),
+            "gamma_array": np.array(gamma_array),
+            "vega_array": np.array(vega_array),
+            "vanna_array": np.array(vanna_array)
         }
 
-        return result
 
 
 

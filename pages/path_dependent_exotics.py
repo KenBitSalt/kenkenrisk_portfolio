@@ -23,7 +23,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     constract_dur_years = int(st.slider("Set contract duration (years): ", 1, 10, 1))
-    simulation_times = int(st.slider("Set simulation times: ", 20, 3000, 1))
+    simulation_times = int(st.slider("Set simulation times: ", 50, 3000, 1500))
 
     steps = constract_dur_years*12
     st.markdown("simulated steps is **(%s)**" % steps)
@@ -40,7 +40,7 @@ with col1:
 )
     
     sigma = st.number_input(
-    "sigma", value=0.05, placeholder="Type-in sigma rate..."
+    "sigma", value=0.06, placeholder="Type-in sigma rate..."
 )
     st.write("The current S0, r, vol: ", S0, r, sigma)
 
@@ -48,12 +48,12 @@ with col1:
 with col2:
     contract_type = st.radio(
     "Select contract genre: ",
-    ["***Accumulator***", "***FCN***", "***CCN***","***Phoenix***"],
+    ["***Accumulator***", "***FCN***", "***DCN***","***Phoenix***"],
     captions=[
         "雪球",
-        "not done yet",
-        "not done yet",
-        "not done yet"
+        "每期观察是否敲出；未敲出时固定支付票息。若未敲出但敲入了，到期本金跟随标的表现。",
+        "每期观察一次价格是否在敲入区间内，如果是，就支付固定票息；若到期时发生敲入，则本金有损失。",
+        "每期只要没有敲入，就支付票息；敲入后停止支付票息，若到期低于敲入价，则本金损失。(没有敲出)"
     ],
 )
     
@@ -87,6 +87,13 @@ with col3:
 
         if contract_type == "***Accumulator***":
             payoff = pf.classic_snowball_payoff
+        elif contract_type == "***FCN***":
+            payoff = pf.FCN_payoff
+        elif contract_type == "***DCN***":
+            payoff = pf.DCN_payoff
+        elif contract_type == "***Phoenix***":
+            payoff = pf.phoenix_payoff
+        
             
         engine.set_payoff(lambda paths: payoff(paths, K_in=80, K_out=105, coupon=0.12, S0=100))
         price = engine.price()
@@ -108,5 +115,5 @@ with col4:
 
     st.line_chart(greeks_df, x="S0_array", y="delta_array")
     st.line_chart(greeks_df, x="S0_array", y="gamma_array")
-    st.line_chart(greeks_df, x="sigma_array", y="vega_array")
-    st.line_chart(greeks_df, x="T_array", y="theta_array")
+    st.line_chart(greeks_df, x="S0_array", y="vega_array")
+    st.line_chart(greeks_df, x="S0_array", y="vanna_array")
