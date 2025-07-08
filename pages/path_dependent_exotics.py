@@ -23,8 +23,12 @@ col1, col2 = st.columns(2)
 
 with col1:
     constract_dur_years = int(st.slider("Set contract duration (years): ", 1, 10, 1))
-    simulation_times = int(st.slider("Set simulation times: ", 20, 300, 1))
-    steps = int(st.slider("Set simulation steps: ", 12, 365, 1))
+    simulation_times = int(st.slider("Set simulation times: ", 20, 500, 1))
+
+    steps = constract_dur_years*12
+    st.markdown("simulated steps is **(%s)**" % steps)
+
+    #steps = int(st.slider("Set simulation steps: ", 12, 365, 1))
     engine = MonteCarloEngine(S0=100, r=0.03, sigma=0.2, T=1, N=steps, M=simulation_times)
     paths = engine.simulate_paths()
     #sims = np.arange(1,len(paths)+1)
