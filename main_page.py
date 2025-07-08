@@ -34,6 +34,7 @@ with col1:
     st.markdown("contact me via:")
     st.markdown("- sc4793@columbia.edu")
     st.markdown("- (551)220-8597")
+    st.markdown("- +86 13828730420")
 
 
     st.markdown("Also visit my wechat public account ***四十四二十二*** for equity derivatives analysis content written in Chinese.")
