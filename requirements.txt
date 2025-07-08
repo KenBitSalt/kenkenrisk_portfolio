@@ -11,3 +11,5 @@ pandas_market_calendars
 altair
 vega_datasets
 scikit-learn
+bokeh
+streamlit-bokeh
