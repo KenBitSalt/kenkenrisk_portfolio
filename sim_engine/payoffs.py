@@ -2,7 +2,7 @@ import numpy as np
 
 '''
 定义的结构性payoff方法
-
+input must have a list of paths
 '''
 
 

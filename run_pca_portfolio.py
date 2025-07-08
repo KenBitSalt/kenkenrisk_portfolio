@@ -6,7 +6,7 @@ import sklearn as sk
 # input 3: a list of pool's objective value, each for the pool's component (in order)
 # input 4: a numerical target that assigns the minumum of the portfolio average objective
 # input 5: a integer maximum of the maximum component of the optimized portfolio.
-# output : a list of weight of the refined portfoli0
+# output : a list of weight of the refined portfolio
 
 class PCA_portfolio:
 
