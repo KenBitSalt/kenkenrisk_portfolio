@@ -34,7 +34,7 @@ def classic_snowball_payoff(paths, K_in=80, K_out=105, coupon=0.12, S0=100):
             payoff[i] = S0 * (1 + coupon)
     return payoff
 
-def DCN_payoff(paths, K_in=80, K_out=105, coupon=0.03, S0=100):
+def DCN_payoff(paths, K_in=80, K_out=105, coupon=0.12, S0=100):
     M, N_plus1 = paths.shape
     N = N_plus1 - 1
 
@@ -55,7 +55,7 @@ def DCN_payoff(paths, K_in=80, K_out=105, coupon=0.03, S0=100):
     return payoff
 
 
-def FCN_payoff(paths, K_in=80, K_out=105, coupon=0.03, S0=100):
+def FCN_payoff(paths, K_in=80, K_out=105, coupon=0.12, S0=100):
     M, N_plus1 = paths.shape
     N = N_plus1 - 1
 
@@ -80,7 +80,7 @@ def FCN_payoff(paths, K_in=80, K_out=105, coupon=0.03, S0=100):
     return payoff
 
 
-def phoenix_payoff(paths, K_in=80, K_out=105, coupon=0.03, S0=100):
+def phoenix_payoff(paths, K_in=80, K_out=105, coupon=0.02, S0=100):
     M, N_plus1 = paths.shape
     N = N_plus1 - 1
 

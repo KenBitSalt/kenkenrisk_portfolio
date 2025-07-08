@@ -44,7 +44,7 @@ class MonteCarloEngine:
         return np.mean(discounted)
     
 
-    def estimate_greeks_grid(self, epsilon=1.0, epsilon_sigma = 0.01, num_points=51):
+    def estimate_greeks_grid(self, epsilon=1.5, epsilon_sigma = 0.02, num_points=71):
         assert num_points % 2 == 1, "num_points should be odd to center around current S0."
 
         original_S0 = self.S0
@@ -135,42 +135,6 @@ class MonteCarloEngine:
             "vanna_array": np.array(vanna_array)
         }
 
-
-
-
-    '''
-    def draw(self,save=False, type = "plot"):
-        if type == "plot":
-            for path in self.paths:
-                plt.plot(path)
-            
-            if save:
-                plt.savefig()
-            plt.show()
-
-        elif type == "end_dist":
-            last_elements = [path[-1] for path in self.paths]
-            # Plot distribution
-            sns.histplot(last_elements, kde=True)
-            plt.title("Distribution of last date")
-            plt.xlabel("Last Element")
-            plt.ylabel("Frequency")
-            plt.show()
-
-
-    '''
-
-
-'''
-    # test
-classic_snowball_payoff = pf.classic_snowball_payoff
-engine = MonteCarloEngine(S0=100, r=0.03, sigma=0.2, T=1, N=12, M=10000)
-engine.simulate_paths()
-engine.set_payoff(lambda paths: classic_snowball_payoff(paths, K_in=80, K_out=105, coupon=0.12, S0=100))
-price = engine.price()
-print(f"Fair Value of Classic Snowball: {price:.4f}")
-
-'''
 
 
 

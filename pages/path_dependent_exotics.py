@@ -22,10 +22,10 @@ path_simulated = False
 col1, col2 = st.columns(2)
 
 with col1:
-    constract_dur_years = int(st.slider("Set contract duration (years): ", 1, 10, 1))
+    constract_dur_mon = int(st.slider("Set contract duration (months): ", 6, 12, 6))
     simulation_times = int(st.slider("Set simulation times: ", 50, 3000, 1500))
 
-    steps = constract_dur_years*12
+    steps = constract_dur_mon
     st.markdown("simulated steps is **(%s)**" % steps)
 
     #steps = int(st.slider("Set simulation steps: ", 12, 365, 1))
@@ -40,9 +40,11 @@ with col1:
 )
     
     sigma = st.number_input(
-    "sigma", value=0.06, placeholder="Type-in sigma rate..."
+    "sigma", value=0.1, placeholder="Type-in sigma rate..."
 )
     st.write("The current S0, r, vol: ", S0, r, sigma)
+
+    
 
 
 with col2:
@@ -55,6 +57,8 @@ with col2:
         "每期观察一次价格是否在敲入区间内，如果是，就支付固定票息；若到期时发生敲入，则本金有损失。",
         "每期只要没有敲入，就支付票息；敲入后停止支付票息，若到期低于敲入价，则本金损失。(没有敲出)"
     ],
+
+    
 )
     
 
@@ -72,16 +76,8 @@ with col2:
 
     except:
         st.markdown("Parameters on left not done yet")
+
     
-    
-
-st.divider()
-
-
-
-col3, col4 = st.columns(2)
-
-with col3:
     if path_simulated:
         st.write("The current contract type: ", contract_type)
 
@@ -100,20 +96,22 @@ with col3:
         st.markdown("Price: ***%s***" % price)
     else:
         st.markdown("please simulated path first!")
+    
+    
+
+st.divider()
 
 
 
-with col4:
+st.markdown("Greeks simulations: ")
 
-    st.markdown("Greeks simulations: ")
-
-    greeks = engine.estimate_greeks_grid()
-    #print(greeks['delta_array'])
-    greeks_df = pd.DataFrame(greeks)
-    #print(greeks_df)
+greeks = engine.estimate_greeks_grid()
+#print(greeks['delta_array'])
+greeks_df = pd.DataFrame(greeks)
+#print(greeks_df)
 
 
-    st.line_chart(greeks_df, x="S0_array", y="delta_array")
-    st.line_chart(greeks_df, x="S0_array", y="gamma_array")
-    st.line_chart(greeks_df, x="S0_array", y="vega_array")
-    st.line_chart(greeks_df, x="S0_array", y="vanna_array")
+st.line_chart(greeks_df, x="S0_array", y="delta_array")
+st.line_chart(greeks_df, x="S0_array", y="gamma_array")
+st.line_chart(greeks_df, x="S0_array", y="vega_array")
+st.line_chart(greeks_df, x="S0_array", y="vanna_array")
