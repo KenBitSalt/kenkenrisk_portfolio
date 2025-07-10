@@ -41,8 +41,8 @@ with col1:
     #st.markdown("")
 
 with col2:
-    pass
-    #st.image("files/me.jpg", caption="[Some digital portrait of arthur 2024]")
+    #pass
+    st.image("files/me.jpg", caption="[Some digital representation of arthur's avatar as of 2024]")
 
 
 
