@@ -11,10 +11,7 @@ path = Path(myDir)
 a=str(path.parent.absolute())
 sys.path.append(a)
 
-
-import generate_random_pool as gp
 import PortfolioStressTester as ps
-import json
 
 
 
@@ -27,9 +24,12 @@ st.session_state.visibility = "visible"
 st.session_state.disabled = False
 df = pd.DataFrame()
 uploaded_file = None
+st.divider()
+
+
 
 col1, col2 = st.columns(2)
-st.divider()
+
 
 with col1:
     st.markdown("upload portfolio (this site will not save any user data):")
@@ -47,6 +47,12 @@ with col2:
     if (st.button("获取结果", type="primary")):
         if uploaded_file is not None:
             print("开始测试。。。")
+            st = ps.PortfolioStressTester(portfolio_path=uploaded_file)
+            st.gen_report()
+            result = pd.read_excel("stress_test_results.xlsx")
+            st.write(result)
+            st.image("1.jpng", caption="empirical result")
+            st.image("2.jpng", caption="parametric result")
         else:
             print("Portfolio needed")
 
