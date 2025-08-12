@@ -34,11 +34,28 @@ col1, col2 = st.columns(2)
 with col1:
     st.markdown("upload portfolio (this site will not save any user data):")
     st.markdown("上传持仓 (本站不会保存任何用户数据):")
+
+
+
     uploaded_file = st.file_uploader("Choose a file")
+
+
+
+    with open("config.json", "rb") as file:
+        st.download_button(
+            label="Download sample config",
+            data=file,
+            file_name="sample_config.json",
+            mime="json",
+        )
+
+
     if uploaded_file is not None:
         # Can be used wherever a "file-like" object is accepted:
         dataframe = pd.read_excel(uploaded_file)
         st.write(dataframe)
+
+    
 
 
 with col2:
