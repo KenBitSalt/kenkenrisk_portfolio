@@ -44,9 +44,11 @@ with col1:
 with col2:
     st.markdown("结果:")
     
-    if (uploaded_file is not None) and (st.button("获取结果", type="primary")):
-
-        pass
+    if (st.button("获取结果", type="primary")):
+        if uploaded_file is not None:
+            print("开始测试。。。")
+        else:
+            print("Portfolio needed")
 
 st.divider()
 
