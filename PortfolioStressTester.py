@@ -289,12 +289,13 @@ class PortfolioStressTester:
             df_merged = df_merged.reset_index(drop=True)
             os.makedirs("data", exist_ok=True)
             save_path = f"data/prices_{self.last_trade_date.strftime("%Y%m%d")}.csv"
-            df_merged.to_csv(save_path)
-            print(f"价格数据已保存至 {save_path}")
+            #df_merged.to_csv(save_path)
+            #print(f"价格数据已保存至 {save_path}")
         else:
-            print("⚠️ 无价格数据可保存")
+            #print("⚠️ 无价格数据可保存")
+            pass
 
-        return price_data
+        return price_data,df_merged
 
     def init_md(self):
         if self.portfolio_df is None:
@@ -303,7 +304,8 @@ class PortfolioStressTester:
         df = self.portfolio_df.rename(columns={
             "交易日": "date",
             "标的代码": "ticker",
-            "名义本金": "notional",
+            #"名义本金": "notional",
+            "标的数量": "vol",
             "行业信息": "sector"
         }).copy()
 
@@ -311,24 +313,41 @@ class PortfolioStressTester:
 
         latest_date = df["date"].max()
         df_latest = df[df["date"] == latest_date].groupby('ticker').agg({
-            "notional": "sum",
+            #"notional": "sum",
+            "vol":"sum",
             "sector": "first"   # 或者 lambda x: x.iloc[0]
         })
 
+
         ticker_to_sector = dict(zip(df_latest.index, df_latest["sector"]))
-        print(ticker_to_sector)
-        
+       # print(ticker_to_sector)
 
 
         df_latest["ticker"] = df_latest.index
 
-        self.weights = df_latest.set_index("ticker")["notional"]
+        self.weights = df_latest.set_index("ticker")["vol"]
         self.total_size = self.weights.sum()
         self.weights = self.weights / self.weights.sum()
         tickers = self.weights.index.tolist()
 
+
+        price_data,price_df = self.fetch_price_series(tickers)
+        latest_price_data = price_df[price_df['date']==self.last_trade_date.strftime("%Y%m%d")].T
+        latest_price_data.columns = ['price']
+        df_latest = df_latest.merge(latest_price_data,how="left",right_index = True, left_index = True)
+        df_latest['size'] = df_latest['vol']*df_latest['price']
+
+        self.weights = df_latest.set_index("ticker")["size"]
+        print(len(self.weights))
+        self.total_size = self.weights.sum()
+        print('total size is: %s' % self.total_size)
+        self.weights = self.weights / self.weights.sum()
+        tickers = self.weights.index.tolist()
+
+        
+        print(df_latest)
         print(f"\n📌 最新持仓日期：{latest_date.date()}，共 {len(tickers)} 个标的")
-        price_data = self.fetch_price_series(tickers)
+        
 
         # 整合价格序列，计算收益
         aligned = pd.concat(price_data, axis=1).sort_index()#.dropna()
@@ -362,8 +381,8 @@ class PortfolioStressTester:
             returns[col] = returns[col].fillna(sub_ret).fillna(0)
 
         self.returns = returns.fillna(0) #考虑到三个市场存在不一样的交易日，nan日确认已为别的市场交易时候，该市场的休息日因此收益为0
-        returns.to_excel(f"data/returns_{self.last_trade_date.strftime("%Y%m%d")}.xlsx")
-        print(f"returns数据整合完毕现在保存至：data/returns_{self.last_trade_date.strftime("%Y%m%d")}.xlsx")
+        #returns.to_excel(f"data/returns_{self.last_trade_date.strftime("%Y%m%d")}.xlsx")
+        #print(f"returns数据整合完毕现在保存至：data/returns_{self.last_trade_date.strftime("%Y%m%d")}.xlsx")
 
     def run_stress_test(self, level = None, days = None,method = "parametric"):
         """
@@ -386,8 +405,7 @@ class PortfolioStressTester:
             n = self.days
 
         self.portfolio_returns = self.returns @ self.weights
-        df_res = pd.DataFrame(self.portfolio_returns)
-        df_res.to_excel("res.xlsx")
+
         def calculate_var_maxloss(returns_df = self.returns, weights =self.weights, y=0.99,n=5, method = method):
             print()
             portfolio_returns = returns_df @ weights
