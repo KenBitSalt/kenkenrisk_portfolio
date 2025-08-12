@@ -47,8 +47,8 @@ with col2:
     if (st.button("获取结果", type="primary")):
         if uploaded_file is not None:
             print("开始测试。。。")
-            st = ps.PortfolioStressTester(portfolio_path=uploaded_file)
-            st.gen_report()
+            tester = ps.PortfolioStressTester(portfolio_path=uploaded_file)
+            tester.gen_report()
             result = pd.read_excel("stress_test_results.xlsx")
             st.write(result)
             st.image("1.jpng", caption="empirical result")
