@@ -12,7 +12,7 @@ a=str(path.parent.absolute())
 sys.path.append(a)
 
 
-
+import generate_random_pool as gp
 import PortfolioStressTester as ps
 import json
 
