@@ -51,9 +51,10 @@ with col1:
         # Convert to a string based IO:
         # Decode the uploaded file to a string
         file_content_str = uploaded_config_file.getvalue().decode("utf-8")
+        config_data = json.loads(file_content_str)
         # Write string to JSON file
         with open("config_user.json", "w") as f:
-            json.dump({"message": file_content_str}, f, indent=4)
+            json.dump(config_data, f, indent=4, ensure_ascii=False)
 
         st.write(file_content_str)
 
