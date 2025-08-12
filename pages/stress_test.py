@@ -1,3 +1,11 @@
+myDir = os.getcwd()
+sys.path.append(myDir)
+
+from pathlib import Path
+path = Path(myDir)
+a=str(path.parent.absolute())
+sys.path.append(a)
+
 import streamlit as st
 from io import StringIO
 import pandas as pd
@@ -7,15 +15,8 @@ import sys
 import PortfolioStressTester as ps
 import json
 
-myDir = os.getcwd()
-sys.path.append(myDir)
 
-from pathlib import Path
-path = Path(myDir)
-a=str(path.parent.absolute())
-sys.path.append(a)
-import generate_random_pool as gp
-import run_pca_portfolio as rp
+
 
 st.markdown("# Stress Test")
 st.sidebar.markdown("# stress test for portfolio comprising of 3 markets")
