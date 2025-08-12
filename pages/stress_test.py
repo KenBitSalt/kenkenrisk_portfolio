@@ -33,27 +33,31 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.markdown("upload portfolio (this site will not save any user data):")
-    st.markdown("上传持仓 (本站不会保存任何用户数据):")
+    st.markdown("上传持仓 **(不会保存任何用户数据)**:")
 
 
 
-    uploaded_file = st.file_uploader("Choose a file")
+    uploaded_file = st.file_uploader("Choose a position excel file")
+    if uploaded_file is not None:
+        # Can be used wherever a "file-like" object is accepted:
+        dataframe = pd.read_excel(uploaded_file)
+        st.write(dataframe)
 
 
+    uploaded_config_file = st.file_uploader("Choose a user-specified config file")
+    if uploaded_config_file is not None:
+        # Can be used wherever a "file-like" object is accepted:
+        with open(uploaded_config_file, "rb") as file:
+            st.write(file)
 
     with open("config.json", "rb") as file:
         st.download_button(
-            label="Download sample config",
+            label="Download sample config(下载默认测试配置)",
             data=file,
             file_name="sample_config.json",
             mime="json",
         )
 
-
-    if uploaded_file is not None:
-        # Can be used wherever a "file-like" object is accepted:
-        dataframe = pd.read_excel(uploaded_file)
-        st.write(dataframe)
 
     
 
@@ -61,7 +65,7 @@ with col1:
 with col2:
     st.markdown("结果:")
     
-    if (st.button("获取结果(100个标的大概需要5分钟)", type="primary")):
+    if (st.button("获取结果(100个标的大概需要5分钟,注意按一次即可)", type="primary")):
         if uploaded_file is not None:
             print("开始测试。。。")
             tester = ps.PortfolioStressTester(portfolio_path=uploaded_file)
