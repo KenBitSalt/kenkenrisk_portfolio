@@ -47,11 +47,12 @@ with col1:
     uploaded_config_file = st.file_uploader("Choose a user-specified config file")
     if uploaded_config_file is not None:
         # Can be used wherever a "file-like" object is accepted:
-        st.write(uploaded_config_file)
+        bytes_data = uploaded_config_file.getvalue()
+        st.write(bytes_data)
 
     with open("config.json", "rb") as file:
         st.download_button(
-            label="Download sample config(下载默认测试配置)",
+            label="Download sample config(下载默认测试配置供自定义修改)",
             data=file,
             file_name="sample_config.json",
             mime="json",
