@@ -28,6 +28,16 @@ with open("files/readme.pdf", "rb") as file:
     file_name="files/readme.pdf",
     mime="text/csv",
 )
+
+with open("config.json", "rb") as file:
+    st.download_button(
+        label="Download sample config(下载默认测试配置供自定义修改)",
+        data=file,
+        file_name="sample_config.json",
+        mime="json",
+    )
+
+
 # Store the initial value of widgets in session state
 st.session_state.visibility = "visible"
 st.session_state.disabled = False
@@ -65,14 +75,6 @@ with col1:
 
         st.write(file_content_str)
 
-
-    with open("config.json", "rb") as file:
-        st.download_button(
-            label="Download sample config(下载默认测试配置供自定义修改)",
-            data=file,
-            file_name="sample_config.json",
-            mime="json",
-        )
 
 
     
