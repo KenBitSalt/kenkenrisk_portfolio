@@ -23,7 +23,7 @@ st.markdown("### Stress test for portfolio comprising of 3 markets")
 
 with open("files/readme.pdf", "rb") as file:
     btn = st.download_button(
-    label="使用方法和结构介绍文稿",
+    label="下载使用方法和结构介绍文稿",
     data=file,
     file_name="files/readme.pdf",
     mime="text/csv",
@@ -81,7 +81,7 @@ with col1:
 with col2:
     st.markdown("结果:")
     
-    if (st.button("获取结果(100个标的大概需要5分钟,注意按一次即可)", type="primary")):
+    if (st.button("获取结果(100个标的大概需要3分钟,注意按一次即可)", type="primary")):
         if uploaded_file is not None:
             st.write("开始测试。。。")
             if file_content_str is not None:
