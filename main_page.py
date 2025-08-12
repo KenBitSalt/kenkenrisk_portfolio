@@ -1,9 +1,9 @@
 import streamlit as st
 from datetime import datetime
 
-st.markdown("# Kenken Risk Portfolio")
+st.markdown("# Kenken Tool Portfolio")
 st.sidebar.markdown("# About this site:")
-st.sidebar.markdown("hey I'm Ken, I'm a Trader and risk/portfolio manager and current MSOR (conc. financial markets) student at Columbia Engineering.")
+st.sidebar.markdown("hey I'm Ken, I'm a Trader/TradeOps/QuantRisk manager currently pursing Operations Research track")
 st.sidebar.markdown("I focus on financial engineering and risk management and derivatives.")
 # Store the initial value of widgets in session state
 st.session_state.visibility = "visible"
@@ -12,7 +12,7 @@ st.session_state.disabled = False
 col1, col2 = st.columns(2)
 
 with col1:
-    st.markdown("This site is a toy deployment of some highlights of my previous work, detailed in a resume provided below.")
+    st.markdown("This site is a toy deployment of some applications of previous work, detailed in the side bar.")
     
     #with open("files/Chen_Resume.pdf", "rb") as file:
     #    btn = st.download_button(
