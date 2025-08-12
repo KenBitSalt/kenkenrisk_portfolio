@@ -44,15 +44,15 @@ with col1:
 with col2:
     st.markdown("结果:")
     
-    if (st.button("获取结果", type="primary")):
+    if (st.button("获取结果(100个标的大概需要5分钟)", type="primary")):
         if uploaded_file is not None:
             print("开始测试。。。")
             tester = ps.PortfolioStressTester(portfolio_path=uploaded_file)
             tester.gen_report()
             result = pd.read_excel("stress_test_results.xlsx")
             st.write(result)
-            st.image("1.jpng", caption="empirical result")
-            st.image("2.jpng", caption="parametric result")
+            st.image("1.png", caption="empirical result")
+            st.image("2.png", caption="parametric result")
         else:
             print("Portfolio needed")
 
