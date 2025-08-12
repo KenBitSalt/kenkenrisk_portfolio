@@ -21,6 +21,13 @@ import json
 st.markdown("## Portfolio Stress Test")
 st.markdown("### Stress test for portfolio comprising of 3 markets")
 
+with open("files/readme.pdf", "rb") as file:
+    btn = st.download_button(
+    label="使用方法和结构介绍文稿",
+    data=file,
+    file_name="files/readme.pdf",
+    mime="text/csv",
+)
 # Store the initial value of widgets in session state
 st.session_state.visibility = "visible"
 st.session_state.disabled = False
