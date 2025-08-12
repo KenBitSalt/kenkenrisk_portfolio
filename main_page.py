@@ -3,7 +3,7 @@ from datetime import datetime
 
 st.markdown("# Kenken Tool Portfolio")
 st.sidebar.markdown("# About this site:")
-st.sidebar.markdown("hey I'm Ken, I'm a Trader/TradeOps/QuantRisk manager currently pursing Operations Research track")
+st.sidebar.markdown("I'm a Trader/TradeOps/QuantRisk manager currently pursing Operations Research track")
 st.sidebar.markdown("I focus on financial engineering and risk management and derivatives.")
 # Store the initial value of widgets in session state
 st.session_state.visibility = "visible"
