@@ -1,4 +1,8 @@
-import os
+import streamlit as st
+from io import StringIO
+import pandas as pd
+import os 
+import sys
 
 myDir = os.getcwd()
 sys.path.append(myDir)
@@ -8,11 +12,7 @@ path = Path(myDir)
 a=str(path.parent.absolute())
 sys.path.append(a)
 
-import streamlit as st
-from io import StringIO
-import pandas as pd
-import os 
-import sys
+
 
 import PortfolioStressTester as ps
 import json
