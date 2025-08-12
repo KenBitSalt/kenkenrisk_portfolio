@@ -47,8 +47,7 @@ with col1:
     uploaded_config_file = st.file_uploader("Choose a user-specified config file")
     if uploaded_config_file is not None:
         # Can be used wherever a "file-like" object is accepted:
-        with open(uploaded_config_file, "rb") as file:
-            st.write(file)
+        st.write(uploaded_config_file)
 
     with open("config.json", "rb") as file:
         st.download_button(
