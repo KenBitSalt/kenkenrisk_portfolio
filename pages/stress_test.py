@@ -20,7 +20,7 @@ import json
 
 
 st.markdown("## Portfolio Stress Test")
-st.markdown("### stress test for portfolio comprising of 3 markets")
+st.markdown("### Stress test for portfolio comprising of 3 markets")
 
 # Store the initial value of widgets in session state
 st.session_state.visibility = "visible"
@@ -43,6 +43,10 @@ with col1:
 
 with col2:
     st.markdown("结果:")
+    
+    if (uploaded_file is not None) and (st.button("获取结果", type="primary")):
+
+        pass
 
 st.divider()
 
