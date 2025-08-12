@@ -19,7 +19,7 @@ import json
 
 
 
-st.markdown("# Stress Test")
+st.markdown("## Portfolio Stress Test")
 st.markdown("### stress test for portfolio comprising of 3 markets")
 
 # Store the initial value of widgets in session state
@@ -29,13 +29,15 @@ df = pd.DataFrame()
 uploaded_file = None
 
 col1, col2 = st.columns(2)
+st.divider()
 
 with col1:
-    pass
+    st.markdown("upload portfolio (this site will not save any user data):")
+    st.markdown("上传持仓 (本站不会保存任何用户数据):")
 
 
 with col2:
-    pass
+    st.markdown("结果:")
 
 st.divider()
 

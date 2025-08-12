@@ -14,3 +14,4 @@ scikit-learn
 bokeh
 streamlit-bokeh
 akshare
+seaborn
