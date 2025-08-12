@@ -34,6 +34,11 @@ st.divider()
 with col1:
     st.markdown("upload portfolio (this site will not save any user data):")
     st.markdown("上传持仓 (本站不会保存任何用户数据):")
+    uploaded_file = st.file_uploader("Choose a file")
+    if uploaded_file is not None:
+        # Can be used wherever a "file-like" object is accepted:
+        dataframe = pd.read_excel(uploaded_file)
+        st.write(dataframe)
 
 
 with col2:
