@@ -49,11 +49,13 @@ with col1:
     uploaded_config_file = st.file_uploader("(Optional) Choose a user-specified config file")
     if uploaded_config_file is not None:
         # Convert to a string based IO:
-        stringio = StringIO(uploaded_config_file.getvalue().decode("utf-8"))
+        # Decode the uploaded file to a string
+        file_content_str = uploaded_config_file.getvalue().decode("utf-8")
         # Write string to JSON file
         with open("config_user.json", "w") as f:
-            json.dump({"message": stringio.getvalue()}, f)
-        st.write(stringio)
+            json.dump({"message": file_content_str}, f, indent=4)
+
+        st.write(file_content_str)
 
 
     with open("config.json", "rb") as file:
