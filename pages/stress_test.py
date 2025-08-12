@@ -75,9 +75,9 @@ with col2:
     
     if (st.button("获取结果(100个标的大概需要5分钟,注意按一次即可)", type="primary")):
         if uploaded_file is not None:
-            print("开始测试。。。")
+            st.write("开始测试。。。")
             if file_content_str is not None:
-                print("使用用户提供config")
+                st.write("使用用户提供config")
                 tester = ps.PortfolioStressTester(config_path="config_user.json",portfolio_path=uploaded_file)
                 tester.gen_report()
 
