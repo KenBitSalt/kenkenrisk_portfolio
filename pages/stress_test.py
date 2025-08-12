@@ -52,7 +52,7 @@ with col1:
         stringio = StringIO(uploaded_config_file.getvalue().decode("utf-8"))
         # Write string to JSON file
         with open("config_user.json", "w") as f:
-            json.dump({"message": stringio}, f)
+            json.dump({"message": stringio.getvalue()}, f)
         st.write(stringio)
 
 
