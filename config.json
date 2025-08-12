@@ -1,0 +1,57 @@
+{
+  "TUSHARE_TOKEN": "88496aa09c93288465c2695e8ebf44f51442e0c7d3756d6485df3baa",
+  "DEFAULT_LOOKBACK_YEARS": 5,
+  "DEFAULT_VAR_DAYS": 5,
+  "DEFAULT_STRESS_LEVEL": 0.99,
+
+
+
+  "USE_ADJUSTED_PRICE": true,
+
+
+  "A_SHARE_SECTOR_TO_INDEX": {
+  },
+
+
+  "HK_SECTOR_TO_INDEX": {
+    "汽车零部件": "HSCIIN",
+    "社交Ⅱ": "HSTECH",    
+    "化学制药": "HSHCI",          
+    "半导体": "HSTECH",  
+    "影视院线": "HSTECH", 
+    "工业金属": "HSCIIN",   
+    "生物制品": "HSHCI",  
+    "物流": "HSI",       
+    "消费电子": "HSCGSI",
+    "养殖业": "HSU",       
+    "航运港口": "HSC",   
+    "饰品": "HSCICD",       
+    "通信设备": "HSCITC",    
+    "饮料乳品": "HSBACG",    
+    "文娱用品": "HSCGSI",
+    "元件": "HSTECH",     
+    "商用车": "HSCIIN",         
+    "电网设备": "HSCIEN",    
+    "小金属": "HSCIIN",
+    "Biotechnology": "HSHKBIO",    
+    "Healthcare-Products":"HSHCI",  
+    "Pharmaceuticals": "HSHCI",           
+    "多元金融": "HSF",
+    "Oil&Gas Services": "HSCIEN"      
+},
+
+  "ENABLE_LOGGING": true,
+  "LOG_LEVEL": "INFO",
+
+  "US_INDEX": "IXIC",
+  "HK_INDEX": "industry",
+  "CN_INDEX": "000905.SH",
+
+  "DEFAULT_MARKET_CALENDAR": "CN",
+
+  "VAR_LEVELS": [0.95,0.99,0.995],
+
+  "VAR_DAYS": [1,3,5],
+
+  "METHODS": ["parametric", "empirical"]
+}
