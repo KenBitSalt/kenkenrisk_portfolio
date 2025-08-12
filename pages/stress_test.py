@@ -13,6 +13,7 @@ a=str(path.parent.absolute())
 sys.path.append(a)
 
 import PortfolioStressTester as ps
+import json
 
 
 
@@ -45,10 +46,13 @@ with col1:
         st.write(dataframe)
 
 
-    uploaded_config_file = st.file_uploader("Choose a user-specified config file")
+    uploaded_config_file = st.file_uploader("(Optional) Choose a user-specified config file")
     if uploaded_config_file is not None:
         # Convert to a string based IO:
         stringio = StringIO(uploaded_config_file.getvalue().decode("utf-8"))
+        # Write string to JSON file
+        with open("config_user.json", "w") as f:
+            json.dump({"message": stringio}, f)
         st.write(stringio)
 
 
@@ -70,8 +74,16 @@ with col2:
     if (st.button("获取结果(100个标的大概需要5分钟,注意按一次即可)", type="primary")):
         if uploaded_file is not None:
             print("开始测试。。。")
-            tester = ps.PortfolioStressTester(portfolio_path=uploaded_file)
-            tester.gen_report()
+            if stringio is not None:
+                print("使用用户提供config")
+                tester = ps.PortfolioStressTester(config_path="config_user.json",portfolio_path=uploaded_file)
+                tester.gen_report()
+
+            else:
+                print("使用默认模式config")
+                tester = ps.PortfolioStressTester(portfolio_path=uploaded_file)
+                tester.gen_report()
+
             result = pd.read_excel("stress_test_results.xlsx")
             st.write(result)
             st.image("1.png", caption="empirical result")
