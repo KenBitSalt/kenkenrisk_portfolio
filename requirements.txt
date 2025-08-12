@@ -13,3 +13,4 @@ vega_datasets
 scikit-learn
 bokeh
 streamlit-bokeh
+akshare

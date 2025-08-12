@@ -20,7 +20,7 @@ import json
 
 
 st.markdown("# Stress Test")
-st.sidebar.markdown("# stress test for portfolio comprising of 3 markets")
+st.markdown("### stress test for portfolio comprising of 3 markets")
 
 # Store the initial value of widgets in session state
 st.session_state.visibility = "visible"
