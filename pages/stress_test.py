@@ -48,7 +48,7 @@ with col1:
     uploaded_config_file = st.file_uploader("Choose a user-specified config file")
     if uploaded_config_file is not None:
         # Convert to a string based IO:
-        stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
+        stringio = StringIO(uploaded_config_file.getvalue().decode("utf-8"))
         st.write(stringio)
 
 
