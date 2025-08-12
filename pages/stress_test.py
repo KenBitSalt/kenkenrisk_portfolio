@@ -5,6 +5,7 @@ import sys
 import os
 myDir = os.getcwd()
 sys.path.append(myDir)
+from io import StringIO
 
 from pathlib import Path
 path = Path(myDir)
@@ -46,9 +47,10 @@ with col1:
 
     uploaded_config_file = st.file_uploader("Choose a user-specified config file")
     if uploaded_config_file is not None:
-        # Can be used wherever a "file-like" object is accepted:
-        bytes_data = uploaded_config_file.getvalue()
-        st.write(bytes_data)
+        # Convert to a string based IO:
+        stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
+        st.write(stringio)
+
 
     with open("config.json", "rb") as file:
         st.download_button(
