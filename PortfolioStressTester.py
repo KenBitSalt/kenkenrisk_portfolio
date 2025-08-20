@@ -1,4 +1,4 @@
-import tushare as ts
+
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -8,6 +8,7 @@ import seaborn as sns
 import numpy as np
 from scipy.stats import norm
 from tqdm import tqdm
+import requests
 
 import akshare as ak
 
@@ -17,9 +18,9 @@ class PortfolioStressTester:
             self.config = json.load(f)
 
         # 基础配置
-        self.token = self.config["TUSHARE_TOKEN"]
-        ts.set_token(self.token)
-        self.pro = ts.pro_api()
+        #self.token = self.config["TUSHARE_TOKEN"]
+        #ts.set_token(self.token)
+        #self.pro = ts.pro_api()
 
 
         self.lookback_years = self.config["DEFAULT_LOOKBACK_YEARS"]
@@ -32,25 +33,46 @@ class PortfolioStressTester:
         self.cn_sub = self.config["CN_INDEX"] # 也就是csi500
         self.hk_industry_index_map = self.config["HK_SECTOR_TO_INDEX"] 
 
+        # 美元兑人民币
+        self.usd_rates = self.init_fx("USD", ["CNY"])['CNY']
+        print(f"1 USD = {self.usd_rates} CNY")
+
+        # 港币兑人民币（方法1：直接HKD为base）
+        self.hkd_rates = self.init_fx("HKD", ["CNY"])['CNY']
+        print(f"1 HKD = {self.hkd_rates} CNY")
         
         # 读取持仓表
         self.portfolio_df = None
         if portfolio_path:
             df1= pd.read_excel(portfolio_path)
+            df1["标的代码"] = df1["标的代码"].astype(str).str.upper()
             #print(df1["行业信息"].unique())
             self.portfolio_df =  df1
             #print(self.portfolio_df["行业信息"].unique())
             date_col = "交易日" if "交易日" in df1.columns else "date"
-            #self.portfolio_df = df
             self.last_trade_date = datetime.strptime(str(df1[date_col].max()),"%Y%m%d") #最后交易日
-            self.start_date = (self.last_trade_date - timedelta(days=365 * self.lookback_years))
+            self.start_date = (self.last_trade_date - timedelta(days=(365 * self.lookback_years-2)))
+            print("分析日期：")
+            print(self.start_date,self.last_trade_date)
 
+            # 如 industry 运维一份hk_ind_df
             if self.hk_sub == "industry":
                 self.hk_industry_df = self.init_hk_ind()
 
             #self.start_date = (self.last_trade_date - timedelta(days=365 * self.lookback_years))
             print(self.last_trade_date)
+            
             self.initialize_market_and_sector_returns()
+
+    def init_fx(self,base="USD", symbols=["CNY", "HKD"]):
+            url = f"https://open.er-api.com/v6/latest/{base}"
+            resp = requests.get(url)
+            data = resp.json()
+            if data["result"] != "success":
+                raise Exception("API error: " + data.get("error-type", "unknown"))
+
+            rates = {sym: data["rates"][sym] for sym in symbols}
+            return rates
 
 
     def init_hk_ind(self):
@@ -104,6 +126,7 @@ class PortfolioStressTester:
         # 参数
         last_date_str = self.last_trade_date.strftime("%Y%m%d")
         start_date_str = self.start_date.strftime("%Y%m%d")
+        print(start_date_str,last_date_str )
 
         # 获取 config 中的替代指数
         self.us_index_code = self.us_sub
@@ -111,8 +134,16 @@ class PortfolioStressTester:
         self.cn_index_code = self.cn_sub
 
         def get_index_return(ts_code):
+            #index_global_spot_em_df = ak.index_global_spot_em()
+            #print(index_global_spot_em_df)          
             try:
-                df = self.pro.index_global(ts_code=ts_code, start_date=start_date_str, end_date=last_date_str)
+                #df = self.pro.index_global(ts_code=ts_code, start_date=start_date_str, end_date=last_date_str)
+                df = ak.index_global_hist_em(symbol=ts_code)
+            #print(df)
+                df["trade_date"] = df["日期"]
+                df["trade_date"] = pd.to_datetime(df["trade_date"])
+                df["trade_date"] = df["trade_date"].dt.strftime("%Y%m%d")
+                df["close"] = df["最新价"]
                 df = df.sort_values("trade_date")
                 df["return"] = df["close"].pct_change()
                 print(df)
@@ -128,13 +159,18 @@ class PortfolioStressTester:
             self.hk_return = get_index_return(self.hk_index_code)
         else:
             print("using industry performance for hk missing returns")
-            self.hk_hsi = get_index_return("HSI") #save for replacement
+            self.hk_hsi = get_index_return("恒生指数") #save for replacement
             self.hk_return = self.hk_industry_df
 
 
-        cn_df = self.pro.index_daily(ts_code=self.cn_index_code, start_date=start_date_str, end_date=last_date_str)
+        #cn_df = self.pro.index_daily(ts_code=self.cn_index_code, start_date=start_date_str, end_date=last_date_str)
+        cn_df = ak.index_zh_a_hist(symbol=self.cn_index_code, start_date=start_date_str, end_date=last_date_str, period = "daily")
         #print(cn_df)
-        cn_df  = cn_df .sort_values("trade_date")
+        cn_df["trade_date"] = cn_df["日期"]
+        cn_df["trade_date"] = pd.to_datetime(cn_df["trade_date"])
+        cn_df["trade_date"] = cn_df["trade_date"].dt.strftime("%Y%m%d")
+        cn_df["close"] = cn_df["收盘"]
+        cn_df  = cn_df.sort_values("trade_date")
         cn_df["return"] = cn_df["close"].pct_change()
         print(cn_df)
         self.cn_return = cn_df.set_index("trade_date")["return"]
@@ -143,55 +179,6 @@ class PortfolioStressTester:
         self.init_md()
         #print(self.us_return)
         #print(self.hk_return)
-
-
-
-    def eda_print(self, plot=False):
-        if self.portfolio_df is None:
-            raise ValueError("未加载持仓数据。")
-
-        df = self.portfolio_df.copy()
-        df = df.rename(columns={
-            "交易日": "date",
-            "标的代码": "ticker",
-            "标的名称": "name",
-            "名义本金": "notional",
-            "行业信息": "sector"
-        })
-        df["date"] = pd.to_datetime(df["date"], format="%Y%m%d")
-        
-        print("\n 基础信息")
-        print(f"- 持仓记录总数: {len(df)}")
-        print(f"- 日期范围: {df['date'].min().date()} ~ {df['date'].max().date()}")
-        print(f"- 不同持仓日期数: {df['date'].nunique()}")
-
-        print("\n -- 每日持仓资产数量（前10行）")
-        print(df.groupby("date")["ticker"].nunique().head(10))
-
-        print("\n -- 每日名义本金总额（单位：元）")
-        print(df.groupby("date")["notional"].sum().describe())
-
-        print("\n -- 缺失值检查")
-        print(df[["ticker", "name", "sector", "notional"]].isna().sum())
-
-        print("\n -- 行业集中度（按名义本金加总）")
-        print(df.groupby("sector")["notional"].sum().sort_values(ascending=False).head(10))
-
-        print("\n -- 个股持仓前10（按名义本金加总）")
-        print(df.groupby(["ticker", "name"])["notional"].sum().sort_values(ascending=False).head(10))
-
-        if plot:
-            try:
-                import matplotlib.pyplot as plt
-                df_count = df.groupby("date")["ticker"].nunique()
-                plt.figure(figsize=(10, 3))
-                df_count.plot(title="每日持仓资产数量")
-                plt.xlabel("日期")
-                plt.ylabel("资产数")
-                plt.tight_layout()
-                plt.show()
-            except:
-                print("---- 绘图失败，可能是环境不支持。")
 
     def identify_market(self,ticker: str) -> str:
         """
@@ -215,7 +202,6 @@ class PortfolioStressTester:
         获取 A股（Tushare）+ 港股/美股（AkShare）历史前复权收盘价，并保存为 CSV
         返回：{ticker: pd.Series of close prices}
         """
-        import tushare as ts
         import akshare as ak
         import pandas as pd
         import os
@@ -224,7 +210,8 @@ class PortfolioStressTester:
         start_date = self.start_date.strftime("%Y%m%d")
         end_date = self.last_trade_date.strftime("%Y%m%d")
         today_str = datetime.today().strftime("%Y%m%d")
-
+        
+        # dict[tickers] = dataframe series of prices
         price_data = {}
         printed = 0
         for ticker in tqdm(tickers):
@@ -234,13 +221,19 @@ class PortfolioStressTester:
 
             try:
                 if market == "CN":
-                    
-                    df = self.pro.daily(ts_code = ticker,start_date=start_date, end_date = end_date)
-                    #print(df)
+                    ticker_now = ticker.split(".")[0]
+                    print(ticker_now)
+                    df = ak.stock_zh_a_hist(symbol=ticker_now, period="daily", start_date=start_date, end_date=end_date, adjust="qfq")
+                #df = self.pro.daily(ts_code = ticker,start_date=start_date, end_date = end_date)
+                    print(df)
                     if df is not None and not df.empty:
-                        print('good')
-                        df = df.sort_values("trade_date")
-                        series = df.set_index("trade_date")["close"]
+                        print(f'good: length {len(df)}')
+                        df["date"] = pd.to_datetime(df["日期"])
+                        df["date"] = df["date"].dt.strftime("%Y%m%d")
+                        df = df.sort_values("date")
+
+                        # append to dict
+                        series = df.set_index("date")["收盘"]
                         price_data[ticker] = series.astype(float)
                     else:
                         print("empty ", ticker)
@@ -250,11 +243,13 @@ class PortfolioStressTester:
                     print(code)
                     df = ak.stock_hk_hist(symbol=code, start_date=start_date, end_date=end_date)
                     if not df.empty:
-                        print('good')
+                        print(f'good: length {len(df)}')
                         df = df.rename(columns={"日期": "date", "收盘": "close"})
                         df["date"] = pd.to_datetime(df["date"])
                         df["date"] = df["date"].dt.strftime("%Y%m%d")
-                        price_data[ticker] = df.set_index("date")["close"].astype(float)
+
+                        # append to dict
+                        price_data[ticker] = df.set_index("date")["close"].astype(float)*self.hkd_rates
                     else:
                         print("empty ", ticker)
 
@@ -263,12 +258,15 @@ class PortfolioStressTester:
                     print(symbol)
                     df = ak.stock_us_daily(symbol=symbol, adjust="qfq")
                     if not df.empty:
-                        print('good')
+                        print(f'good: length {len(df)}')
                         df = df.rename(columns={"日期": "date", "收盘": "close"})
                         df["date"] = pd.to_datetime(df["date"])
                         df["date"] = df["date"].dt.strftime("%Y%m%d")
                         df = df[(df["date"] >= start_date) & (df["date"] <= end_date)]
-                        price_data[ticker] = df.set_index("date")["close"].astype(float)
+
+
+                        #  append to dict
+                        price_data[ticker] = df.set_index("date")["close"].astype(float)*self.usd_rates
                     else:
                         print("empty ", ticker)
 
@@ -300,26 +298,42 @@ class PortfolioStressTester:
     def init_md(self):
         if self.portfolio_df is None:
             raise ValueError("未加载持仓数据")
-
-        df = self.portfolio_df.rename(columns={
-            "交易日": "date",
-            "标的代码": "ticker",
-            #"名义本金": "notional",
-            "标的数量": "vol",
-            "行业信息": "sector"
-        }).copy()
+        if self.hk_index_code == "industry":
+            df = self.portfolio_df.rename(columns={
+                "交易日": "date",
+                "标的代码": "ticker",
+                #"名义本金": "notional",
+                "标的数量": "vol",
+                "行业信息": "sector"
+            }).copy()
+        else:
+            df = self.portfolio_df.rename(columns={
+                "交易日": "date",
+                "标的代码": "ticker",
+                #"标的名称": "name",
+                "标的数量": "vol",
+                #"名义本金": "notional",
+                #"行业信息": "sector"
+            })
 
         df["date"] = pd.to_datetime(df["date"], format="%Y%m%d")
 
         latest_date = df["date"].max()
-        df_latest = df[df["date"] == latest_date].groupby('ticker').agg({
-            #"notional": "sum",
-            "vol":"sum",
-            "sector": "first"   # 或者 lambda x: x.iloc[0]
-        })
+        if self.hk_index_code == "industry":
+            df_latest = df[df["date"] == latest_date].groupby('ticker').agg({
+                #"notional": "sum",
+                "vol":"sum",
+                "sector": "first"   # 或者 lambda x: x.iloc[0]
+            })
+        else:
+            df_latest = df[df["date"] == latest_date].groupby('ticker').agg({
+                #"notional": "sum",
+                "vol":"sum",
+                #"sector": "first"   # 或者 lambda x: x.iloc[0]
+            })
 
-
-        ticker_to_sector = dict(zip(df_latest.index, df_latest["sector"]))
+        if self.hk_index_code == "industry":
+            ticker_to_sector = dict(zip(df_latest.index, df_latest["sector"]))
        # print(ticker_to_sector)
 
 
@@ -341,7 +355,7 @@ class PortfolioStressTester:
         print(len(self.weights))
         self.total_size = self.weights.sum()
         print('total size is: %s' % self.total_size)
-        self.weights = self.weights / self.weights.sum()
+        self.weights = self.weights / self.weights.abs().sum()
         tickers = self.weights.index.tolist()
 
         
@@ -351,21 +365,24 @@ class PortfolioStressTester:
 
         # 整合价格序列，计算收益
         aligned = pd.concat(price_data, axis=1).sort_index()#.dropna()
-        #aligned.to_excel("aligned.xlsx")
+        aligned.to_excel("aligned.xlsx")
         returns = aligned.pct_change()
         #returns.to_excel("result.xlsx")
         # 遍历每列，根据 ticker 判断市场后，用相应指数 return 替换 NaN
         for col in returns.columns:
             if col.endswith((".SH", ".SZ")):
                 sub_ret = self.cn_return
+                print(sub_ret)
             elif col.endswith((".SZHK", ".HK")):
                 if self.hk_index_code != "industry":
                     sub_ret = self.hk_return
+                    print(sub_ret)
                 else:
                     #TODO
                     now_indus = ticker_to_sector[col]
                     #print(f"replacing {col} with {self.hk_industry_index_map[now_indus]}")
                     sub_ret = self.hk_industry_df[self.hk_industry_df['sector'] == now_indus]["return"] #此乃对应industry的return
+                    sub_ret = sub_ret.fillna(self.hk_hsi)
                     #print(sub_ret)
                     #print("hk subret")
                     #print(sub_ret)
@@ -376,12 +393,13 @@ class PortfolioStressTester:
                 #print("us subret")
                 #print(sub_ret)
                 sub_ret = self.us_return
+                print(sub_ret)
             else:
                 continue
             returns[col] = returns[col].fillna(sub_ret).fillna(0)
 
         self.returns = returns.fillna(0) #考虑到三个市场存在不一样的交易日，nan日确认已为别的市场交易时候，该市场的休息日因此收益为0
-        #returns.to_excel(f"data/returns_{self.last_trade_date.strftime("%Y%m%d")}.xlsx")
+        returns.to_excel(f"data/returns_{self.last_trade_date.strftime("%Y%m%d")}.xlsx")
         #print(f"returns数据整合完毕现在保存至：data/returns_{self.last_trade_date.strftime("%Y%m%d")}.xlsx")
 
     def run_stress_test(self, level = None, days = None,method = "parametric"):
@@ -406,39 +424,44 @@ class PortfolioStressTester:
 
         self.portfolio_returns = self.returns @ self.weights
 
-        def calculate_var_maxloss(returns_df = self.returns, weights =self.weights, y=0.99,n=5, method = method):
-            print()
+        def calculate_var_maxloss(returns_df=self.returns, weights=self.weights, y=0.99, n=5, method=method):
             portfolio_returns = returns_df @ weights
-            print(f"\n[VaR计算] 计算方法={method}, 置信度={y}, 时长(日)={n}")
-            print(len(portfolio_returns))
+            print(f"\n[VaR/ES计算] 方法={method}, 置信度={y}, 时长(日)={n}")
+
             if method == "empirical":
-                #portfolio_returns = returns_df @ weights
+                # 历史模拟
                 n_day_returns = portfolio_returns.rolling(window=n).sum().dropna()
                 
                 var_y = np.quantile(n_day_returns, (1-y))
+                es_y = n_day_returns[n_day_returns <= var_y].mean()  # ES: 超过VaR部分的平均损失
                 max_loss = n_day_returns.min()
-                print(f"经验法: VaR(%)={var_y:.4%},VaR(cny)={(var_y*portfolio_value)}, MaxLoss%={max_loss:.4%}, MaxLoss(cny)={max_loss*portfolio_value}")
-                return var_y, max_loss
-            
+                
+                print(f"经验法: VaR(%)={var_y:.4%}, ES(%)={es_y:.4%}, MaxLoss%={max_loss:.4%}")
+                return var_y, es_y, max_loss
+
             elif method == "parametric":
-                #portfolio_returns = returns_df @ weights
+                # 正态近似
                 mu = portfolio_returns.mean()
                 sigma = portfolio_returns.std()
                 z = norm.ppf(1 - y)
                 var_1d = z * sigma - mu
                 var_nd = var_1d * np.sqrt(n)
-                print(f"正态法: z={z:.3f}, mu={mu:.4%}, sigma={sigma:.4%}, VaR(%)={var_nd:.4%}, VaR(cny)={(var_nd*portfolio_value)}")
-                return var_nd, np.nan  # max_loss 不适用于正态假设，可返回 nan 或警告
-                return
+
+                # parametric ES (正态分布公式)
+                es_1d = - (mu - sigma * norm.pdf(z) / (1 - y))
+                es_nd = es_1d * np.sqrt(n)
+
+                print(f"正态法: VaR(%)={var_nd:.4%}, ES(%)={es_nd:.4%}")
+                return var_nd, es_nd, np.nan
         
         portfolio_value = self.total_size
         #portfolio_returns = returns @ weights.loc[returns.columns]
-        var_perc,max_loss_perc = calculate_var_maxloss(y = y, n = n)
-        
+        var_perc, es_perc, max_loss_perc = calculate_var_maxloss(y=y, n=n)
+        var_amt = var_perc * portfolio_value
+        es_amt = es_perc * portfolio_value
+        max_loss_amt = max_loss_perc * portfolio_value if not np.isnan(max_loss_perc) else np.nan
 
-        var,max_loss = var_perc*portfolio_value,max_loss_perc*portfolio_value
-        #print(var1,var3,var5,var1_perc,var3_perc,var5_perc,max_loss)
-        return var_perc,var,max_loss_perc, max_loss
+        return var_perc, var_amt, es_perc, es_amt, max_loss_perc, max_loss_amt
     
 
     def gen_report(self):
@@ -456,7 +479,7 @@ class PortfolioStressTester:
             for level in self.levels_range:
                 for days in self.days_range:
                     print(f"Running stress test: method={method}, level={level}, days={days}")
-                    var_perc, var_amt, max_loss_perc, max_loss_amt = self.run_stress_test(
+                    var_perc, var_amt, es_perc, es_amt, max_loss_perc, max_loss_amt = self.run_stress_test(
                         level=level,
                         days=days,
                         method=method
@@ -467,6 +490,8 @@ class PortfolioStressTester:
                         "days": days,
                         "var_perc": var_perc,
                         "var_amt": var_amt,
+                        "es_perc": es_perc,
+                        "es_amt": es_amt,
                         "max_loss_perc": max_loss_perc,
                         "max_loss_amt": max_loss_amt
                     })

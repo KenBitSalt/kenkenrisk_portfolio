@@ -64,6 +64,7 @@ with col1:
 
 
     uploaded_config_file = st.file_uploader("(Optional) Choose a user-specified config file")
+    file_content_str = None
     if uploaded_config_file is not None:
         # Convert to a string based IO:
         # Decode the uploaded file to a string
