@@ -9,3 +9,5 @@ read -p "Enter second number: " second
 
 result=$(sum "$first" "$second")
 echo "The sum is: $result"
+
+

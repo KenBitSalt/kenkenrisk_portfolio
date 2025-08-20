@@ -191,7 +191,7 @@ class PortfolioStressTester:
                 plt.tight_layout()
                 plt.show()
             except:
-                print("⚠️ 绘图失败，可能是环境不支持。")
+                print("---- 绘图失败，可能是环境不支持。")
 
     def identify_market(self,ticker: str) -> str:
         """
