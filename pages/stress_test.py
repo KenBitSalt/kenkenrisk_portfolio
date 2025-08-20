@@ -53,7 +53,7 @@ col1, col2 = st.columns(2)
 with col1:
     st.markdown("upload portfolio (this site will not save any user data):")
     st.markdown("上传持仓 **(不会保存任何用户数据)**:")
-
+    st.markdown("- **交易日**：`YYYYMMDD` 格式，字符串或 int 均可，程序会自动转换。- **标的代码**：`xxxxx.exchange` 格式（`exchange` 表示交易所，`SZ`/`SH` 为 A 股，`HK` 为港股，`US` 为美股）。- **标的数量**：int。- **行业信息**：（可选，如果没有就要讲config里面的HK_INDEX_CODE改成“恒生指数”）str，用于在 A 股股票缺少特定交易日数据时，用当日行业 return 补齐数据。")
 
 
     uploaded_file = st.file_uploader("Choose a position excel file")
